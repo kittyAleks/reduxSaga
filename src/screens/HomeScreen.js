@@ -6,17 +6,18 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import {TodoRow} from '../components/TodoRow';
 import {addTodo, completedTodo, removeTodo} from '../store/action/todosActions';
+import DropdownMenu from "react-native-dropdown-menu";
+
+let dataArray = [["Max", "Min", "Mid"]]
 
 export const HomeScreen = () => {
   // const [todos, setTodos] = useState(todosItem)
-  const [value, onChangeText] = React.useState('');
   const [text, setText] = useState('')
   const [dropText, setDropText] = useState('')
 
   const dispatch = useDispatch()
 
   const getTodo = useSelector(state => state.todos.allTodos)
-  console.log('QQQ_getTodo',getTodo)
 
   const changeText = text => {
     setText(text);
@@ -38,10 +39,9 @@ export const HomeScreen = () => {
   const completeTodoItem = (id) => {
     dispatch(completedTodo(id))
   }
-
-  const changeDropDownText = (id, row) => {
-    setDropText({dropText})
-  };
+  const handler = (itemValue, row) => {
+    setDropText(itemValue[row])
+  }
 
   return (
     <Container style={styles.container}>
@@ -52,11 +52,6 @@ export const HomeScreen = () => {
         justifyContent: 'center',
 
       }}>
-        <TextInput
-          style={{ height: 40, width: 300, borderColor: 'gray', borderWidth: 1 }}
-          onChangeText={text => onChangeText(text)}
-          // value={value}
-        />
         <InputGroup style={{marginTop: 6, marginBottom: 10}} borderType='regular'>
           <Input
             style={styles.inputStyle}
@@ -69,6 +64,18 @@ export const HomeScreen = () => {
         </InputGroup>
       </View>
 
+      {/*<View style={{flex: 1, width: 150}}>*/}
+      {/*  <View style={{height: 20}} />*/}
+        {/*<DropdownMenu*/}
+        {/*  bgColor={'#eeeeee'}*/}
+        {/*  tintColor={'#666666'}*/}
+        {/*  activityTintColor={'green'}*/}
+        {/*  handler={(itemValue, row) => setDropText([itemValue][row])}*/}
+        {/*  data={dataArray}*/}
+        {/*>*/}
+        {/*</DropdownMenu>*/}
+      {/*</View>*/}
+
       <View style={{flex: 1}}>
         <FlatList
           data={getTodo}
@@ -76,8 +83,10 @@ export const HomeScreen = () => {
           renderItem={ ({item}) => <TodoRow
             remove={() => removeTodoItem(item.id)}
             complete={() => completeTodoItem(item.id)}
-            handler={() => changeDropDownText(item.id)}
-            item={item}/>}
+            handler={() => handler(item.id)}
+            dataArray={dataArray}
+            item={item}/>
+          }
         />
       </View>
 
