@@ -1,0 +1,6 @@
+module Pods_reduxSaga {
+  umbrella header "Pods-reduxSaga-umbrella.h"
+
+  export *
+  module * { export * }
+}
