@@ -1,19 +1,16 @@
 import React, {useEffect, useState} from 'react'
 import {View, StyleSheet, Alert, FlatList, TextInput} from 'react-native';
-import { Container, InputGroup, Input, Text, Button as NBButton } from 'native-base';
-import { v4 as uuidv4 } from 'uuid';
-import { useDispatch, useSelector } from 'react-redux';
+import {Container, InputGroup, Input, Text, Button as NBButton} from 'native-base';
+import {v4 as uuidv4} from 'uuid';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {TodoRow} from '../components/TodoRow';
 import {addTodo, completedTodo, removeTodo} from '../store/action/todosActions';
-import DropdownMenu from "react-native-dropdown-menu";
-
-let dataArray = [["Max", "Min", "Mid"]]
+import {Picker} from "@react-native-community/picker";
 
 export const HomeScreen = () => {
-  // const [todos, setTodos] = useState(todosItem)
   const [text, setText] = useState('')
-  const [dropText, setDropText] = useState('')
+  const Item = Picker.Item;
 
   const dispatch = useDispatch()
 
@@ -39,8 +36,15 @@ export const HomeScreen = () => {
   const completeTodoItem = (id) => {
     dispatch(completedTodo(id))
   }
-  const handler = (itemValue, row) => {
-    setDropText(itemValue[row])
+
+  const renderPickerOptions = () => {
+    let pickerItem = [];
+    pickerItem.push(
+      <Item key="1" label="Max" value="Max"/>,
+      <Item key="2" label="Min" value="Min"/>,
+      <Item key="3" label="Mid" value="Mid"/>
+    );
+    return pickerItem
   }
 
   return (
@@ -64,27 +68,15 @@ export const HomeScreen = () => {
         </InputGroup>
       </View>
 
-      {/*<View style={{flex: 1, width: 150}}>*/}
-      {/*  <View style={{height: 20}} />*/}
-        {/*<DropdownMenu*/}
-        {/*  bgColor={'#eeeeee'}*/}
-        {/*  tintColor={'#666666'}*/}
-        {/*  activityTintColor={'green'}*/}
-        {/*  handler={(itemValue, row) => setDropText([itemValue][row])}*/}
-        {/*  data={dataArray}*/}
-        {/*>*/}
-        {/*</DropdownMenu>*/}
-      {/*</View>*/}
-
       <View style={{flex: 1}}>
         <FlatList
           data={getTodo}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={ ({item}) => <TodoRow
+          keyExtractor={(item) => item.id}
+          renderItem={({item}) => <TodoRow
             remove={() => removeTodoItem(item.id)}
             complete={() => completeTodoItem(item.id)}
-            handler={() => handler(item.id)}
-            dataArray={dataArray}
+            dataTodo={getTodo}
+            renderPicker={renderPickerOptions()}
             item={item}/>
           }
         />
@@ -123,7 +115,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     paddingVertical: 20,
-    flex:1,
+    flex: 1,
   }
 
 });

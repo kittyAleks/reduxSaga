@@ -1,5 +1,5 @@
 /* генераторы экшенов */
-import { ADD_TODO, COMPLETED_TODO, REMOVE_TODO } from '../types';
+import {ADD_TODO, COMPLETED_TODO, REMOVE_TODO, SET_PRIORITY_TO_TASK} from '../types';
 
 export const addTodo = (id, text) => {
   return {
@@ -22,6 +22,14 @@ export const completedTodo = (id) => {
   return {
     type: COMPLETED_TODO,
     id,
+  };
+};
+
+export const setPriorityTodo = (id, elem) => {
+  return {
+    type: SET_PRIORITY_TO_TASK,
+    id,
+    elem,
   };
 };
 

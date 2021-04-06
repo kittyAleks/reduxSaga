@@ -1,4 +1,4 @@
-import {ADD_TODO, COMPLETED_TODO, REMOVE_TODO} from '../types';
+import {SET_PRIORITY_TO_TASK, ADD_TODO, COMPLETED_TODO, REMOVE_TODO} from '../types';
 
 const initialState = {
   allTodos: [],
@@ -39,27 +39,18 @@ export const todosReducer = (state = initialState, action) => {
           todo.id === action.id ? {...todo, completed: !todo.completed} : todo,
         ),
       };
+    case SET_PRIORITY_TO_TASK: {
+      return {
+        ...state,
+        allTodos: state.allTodos.map(todo => todo.id === action.id ? ({
+          ...todo,
+          elem: action.elem,
+        }) : todo)
+      }
+    }
 
     default:
       return state;
-  }
-};
-
-const redux = (action) => {
-  const rootReducers = {
-    todos: todosReducer,
-  };
-  const store = {
-    todos: {},
-  };
-  for (const [reducerName, reducer] of Object.entries(rootReducers)) {
-    const oldState = store[reducerName];
-    const returnedState = reducer(oldState, action);
-    // !!!!!!!!!!!!!!! ALWAYS RETURN NEW OBJECT FROM REDUCER WHEN DATA WAS CHANGED !!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // shallow compare
-    if (oldState !== returnedState) {
-      store[reducerName] = returnedState;
-    }
   }
 };
 

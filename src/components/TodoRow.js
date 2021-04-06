@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import DropdownMenu from "react-native-dropdown-menu";
+import {useDispatch} from 'react-redux';
 
-export const TodoRow = ({item, rowID, remove, complete, handler, dataArray}) => {
+import {Picker} from "@react-native-community/picker";
+import {setPriorityTodo} from "../store/action/todosActions";
+
+export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
+
+  const dispatch = useDispatch()
+
+  const valueChange = (id, elem) => {
+    dispatch(setPriorityTodo(id, elem))
+  }
+
   return (
     <View style={{paddingHorizontal: 15}}>
       <View style={styles.viewContainer}
@@ -14,15 +24,15 @@ export const TodoRow = ({item, rowID, remove, complete, handler, dataArray}) => 
             <Text style={StyleSheet.flatten([styles.text, item.completed && styles.textCompleted])}>{item.text}</Text>
           </TouchableOpacity>
 
-          <View style={{width: 120}}>
-            <DropdownMenu
-              bgColor={'#eeeeee'}
-              tintColor={'#666666'}
-              activityTintColor={'green'}
-              handler={handler}
-              data={dataArray}
-            >
-            </DropdownMenu>
+          <View style={{width: 130}}>
+            <Picker
+              testID="basic-picker"
+              selectedValue={item.elem}
+              onValueChange={(elem) => valueChange(item.id, elem)}
+              // onValueChange={onValueChange}
+              accessibilityLabel="Priority">
+              {renderPicker}
+            </Picker>
           </View>
 
           <TouchableOpacity>
@@ -41,8 +51,7 @@ export const TodoRow = ({item, rowID, remove, complete, handler, dataArray}) => 
 
 const styles = StyleSheet.create({
   viewContainer: {
-    paddingVertical: 15,
-    paddingBottom: 100,
+    paddingVertical: 5,
     paddingHorizontal: 10,
     marginVertical: 10,
     borderWidth: 1,
