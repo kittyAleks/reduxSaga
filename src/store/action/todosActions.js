@@ -14,22 +14,28 @@ export const addTodo = (id, text) => {
 export const removeTodo = (id) => {
   return {
     type: REMOVE_TODO,
-    id
+    payload: {
+      id
+    }
   };
 };
 
 export const completedTodo = (id) => {
   return {
     type: COMPLETED_TODO,
-    id,
+    payload: {
+      id,
+    }
   };
 };
 
-export const setPriorityTodo = (id, elem) => {
+export const setPriorityTodo = (id, selectedValue) => {
   return {
     type: SET_PRIORITY_TO_TASK,
-    id,
-    elem,
+    payload: {
+      id,
+      selectedValue,
+    },
   };
 };
 

@@ -30,21 +30,21 @@ export const todosReducer = (state = initialState, action) => {
     };
     case REMOVE_TODO:
       return {
-        allTodos: state.allTodos.filter(todo => todo.id !== action.id),
+        allTodos: state.allTodos.filter(todo => todo.id !== action.payload.id),
       };
 
     case COMPLETED_TODO:
       return {
         allTodos: state.allTodos.map(todo =>
-          todo.id === action.id ? {...todo, completed: !todo.completed} : todo,
+          todo.id === action.payload.id ? {...todo, completed: !todo.completed} : todo,
         ),
       };
     case SET_PRIORITY_TO_TASK: {
       return {
         ...state,
-        allTodos: state.allTodos.map(todo => todo.id === action.id ? ({
+        allTodos: state.allTodos.map(todo => todo.id === action.payload.id ? ({
           ...todo,
-          elem: action.elem,
+          selectedValue: action.payload.selectedValue,
         }) : todo)
       }
     }

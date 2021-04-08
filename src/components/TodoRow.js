@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {View, StyleSheet, Text, TouchableOpacity, Dimensions} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch} from 'react-redux';
 
@@ -7,12 +7,17 @@ import {Picker} from "@react-native-community/picker";
 import {setPriorityTodo} from "../store/action/todosActions";
 
 export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
-
+  const {width} = Dimensions.get('window');
+  const pickerWidth = width / 2;
   const dispatch = useDispatch()
 
-  const valueChange = (id, elem) => {
-    dispatch(setPriorityTodo(id, elem))
+  const valueChange = (id, selectedValue) => {
+    dispatch(setPriorityTodo(id, selectedValue))
   }
+
+  // const valueChange = useCallback((id, selectedValue) => {
+  //   dispatch(setPriorityTodo(id, selectedValue))
+  // },[dispatch])
 
   return (
     <View style={{paddingHorizontal: 15}}>
@@ -24,13 +29,10 @@ export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
             <Text style={StyleSheet.flatten([styles.text, item.completed && styles.textCompleted])}>{item.text}</Text>
           </TouchableOpacity>
 
-          <View style={{width: 130}}>
+          <View style={{width: pickerWidth}}>
             <Picker
-              testID="basic-picker"
-              selectedValue={item.elem}
-              onValueChange={(elem) => valueChange(item.id, elem)}
-              // onValueChange={onValueChange}
-              accessibilityLabel="Priority">
+              selectedValue={item.selectedValue}
+              onValueChange={(selectedValue) => valueChange(item.id, selectedValue)}>
               {renderPicker}
             </Picker>
           </View>

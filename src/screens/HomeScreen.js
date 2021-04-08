@@ -38,13 +38,13 @@ export const HomeScreen = () => {
   }
 
   const renderPickerOptions = () => {
-    let pickerItem = [];
-    pickerItem.push(
+    let pickerItems = [];
+    pickerItems.push(
       <Item key="1" label="Max" value="Max"/>,
       <Item key="2" label="Min" value="Min"/>,
       <Item key="3" label="Mid" value="Mid"/>
     );
-    return pickerItem
+    return pickerItems
   }
 
   return (
