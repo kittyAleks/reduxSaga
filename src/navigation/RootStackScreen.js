@@ -5,7 +5,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 /* Components */
 
 import { HomeScreen } from '../screens/HomeScreen';
-import { DevicesScreen } from '../screens/DevicesScreen';
+import { CreateTodoListScreen } from '../screens/CreateTodoListScreen';
 import {SettingsScreen} from '../screens/SettingsScreen';
 
 const defaultOptions = {
@@ -43,18 +43,10 @@ export const RootStackScreen = () => (
     }} component={AllTabNavigation} />
 
     <RootStack.Screen
-      name='Devices'
-      component={DevicesScreen}
+      name='CreateTodoListScreen'
+      component={CreateTodoListScreen}
       options={{
-        headerTitle: 'Devices',
-        ...defaultOptions
-      }}
-    />
-    <RootStack.Screen
-      name='Settings'
-      component={SettingsScreen}
-      options={{
-        headerTitle: 'Settings',
+        headerTitle: 'Todo List',
         ...defaultOptions
       }}
     />
@@ -88,21 +80,14 @@ const AllTabNavigation = () => (
         fontSize: 30,
       }}
     />
-    <Tab.Screen
-      name='Devices'
-      component={DevicesScreen}
-      options={{
-        tabBarLabel: 'Devices'
-        // tabBarIcon: () => ()
-      }}
-    />
-    <Tab.Screen
-      name='Settings'
-      component={SettingsScreen}
-      options={{
-        tabBarLabel: 'Settings',
-      }}
-    />
+    {/*<Tab.Screen*/}
+    {/*  name='CreateTodoListScreen'*/}
+    {/*  component={CreateTodoListScreen}*/}
+    {/*  options={{*/}
+    {/*    tabBarLabel: 'TodoList'*/}
+    {/*    // tabBarIcon: () => ()*/}
+    {/*  }}*/}
+    {/*/>*/}
   </Tab.Navigator>
 );
 

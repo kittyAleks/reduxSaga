@@ -1,33 +1,21 @@
-import React, {useEffect, useState} from 'react'
-import {View, StyleSheet, Alert, FlatList, TextInput} from 'react-native';
-import {Container, InputGroup, Input, Text, Button as NBButton} from 'native-base';
-import {v4 as uuidv4} from 'uuid';
+import React from 'react'
+import {View, StyleSheet, FlatList} from 'react-native';
+import {Container, Text, Button} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {TodoRow} from '../components/TodoRow';
-import {addTodo, completedTodo, removeTodo} from '../store/action/todosActions';
+import {completedTodo, removeTodo} from '../store/action/todosActions';
 import {Picker} from "@react-native-community/picker";
 
-export const HomeScreen = () => {
-  const [text, setText] = useState('')
+export const HomeScreen = ({navigation, route}) => {
+  const {color} = route.params;
+  console.log('QQQ_route.params', route.params)
+
   const Item = Picker.Item;
 
   const dispatch = useDispatch()
 
   const getTodo = useSelector(state => state.todos.allTodos)
-
-  const changeText = text => {
-    setText(text);
-  }
-
-  const handleAddTodo = () => {
-    if(text.trim()) {
-      dispatch(addTodo(uuidv4(), text))
-      setText('')
-    } else {
-      Alert.alert('Поле не может быть пустым')
-    }
-  };
 
   const removeTodoItem = (id) => {
     dispatch(removeTodo(id))
@@ -35,6 +23,9 @@ export const HomeScreen = () => {
 
   const completeTodoItem = (id) => {
     dispatch(completedTodo(id))
+  }
+  const createTodoList = () => {
+    navigation.navigate('CreateTodoListScreen')
   }
 
   const renderPickerOptions = () => {
@@ -49,23 +40,15 @@ export const HomeScreen = () => {
 
   return (
     <Container style={styles.container}>
-      <View style={{
-        paddingHorizontal: 10,
-        marginRight: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-
-      }}>
-        <InputGroup style={{marginTop: 6, marginBottom: 10}} borderType='regular'>
-          <Input
-            style={styles.inputStyle}
-            borderType='regular'
-            value={text}
-            autoCapitalize="none"
-            autoCorrect={false}
-            onChangeText={changeText}
-            placeholder='Create your task'/>
-        </InputGroup>
+      <View style={styles.todoListContainer}>
+        <View>
+          <Button onPress={() => {
+            createTodoList()
+          }}
+                  style={{backgroundColor: '#00b7ad', borderRadius: 50}}>
+            <Text>Create Todo</Text>
+          </Button>
+        </View>
       </View>
 
       <View style={{flex: 1}}>
@@ -77,27 +60,10 @@ export const HomeScreen = () => {
             complete={() => completeTodoItem(item.id)}
             dataTodo={getTodo}
             renderPicker={renderPickerOptions()}
+            colorTodo={color}
             item={item}/>
           }
         />
-      </View>
-
-      <View style={{paddingHorizontal: 20}}>
-        <NBButton block style={{
-          backgroundColor: '#00b7ad',
-          alignItems: 'center',
-          marginTop: 30
-        }}
-          onPress={() => handleAddTodo(text)}
-        >
-          <Text allowFontScaling={false}
-            style={{
-              lineHeight: 23,
-              fontSize: 23,
-              color: 'white'
-            }}>Add Todo
-          </Text>
-        </NBButton>
       </View>
     </Container>
   )
@@ -116,6 +82,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 20,
     flex: 1,
+  },
+  todoListContainer: {
+    paddingHorizontal: 10,
+    marginRight: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 
 });

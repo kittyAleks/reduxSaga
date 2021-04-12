@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 import {Picker} from "@react-native-community/picker";
 import {setPriorityTodo} from "../store/action/todosActions";
 
-export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
+export const TodoRow = ({item, rowID, remove, complete, renderPicker, colorTodo}) => {
   const {width} = Dimensions.get('window');
   const pickerWidth = width / 2;
   const dispatch = useDispatch()
@@ -21,7 +21,7 @@ export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
 
   return (
     <View style={{paddingHorizontal: 15}}>
-      <View style={styles.viewContainer}
+      <View style={[styles.viewContainer, {backgroundColor: colorTodo}]}
             key={rowID}>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
 
@@ -53,8 +53,9 @@ export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
 
 const styles = StyleSheet.create({
   viewContainer: {
+    backgroundColor: '#e0d7d7',
     paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     marginVertical: 10,
     borderWidth: 1,
     borderColor: '#868b9b',
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
   },
   textCompleted: {
     textDecorationLine: 'line-through',
-    color: '#b1abab',
+    color: '#e90606',
   },
   text: {
     fontSize: 18,
