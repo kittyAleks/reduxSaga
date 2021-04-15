@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Picker} from "@react-native-community/picker";
 
 import {TodoRow} from '../components/TodoRow';
-import {completedTodo, removeTodo} from '../store/action/todosActions';
+import {clearTodoList, completedTodo, removeTodo} from '../store/action/todosActions';
 
 export const HomeScreen = ({navigation}) => {
 
@@ -25,6 +25,9 @@ export const HomeScreen = ({navigation}) => {
     const createTodoList = () => {
         navigation.navigate('CreateTodoListScreen', )
     }
+    const clearTodos = () => {
+        dispatch(clearTodoList())
+    }
 
     const renderPickerOptions = () => {
         let pickerItems = [];
@@ -39,24 +42,22 @@ export const HomeScreen = ({navigation}) => {
     return (
         <Container style={styles.container}>
             <View style={styles.todoListContainer}>
-                TODO: Transfer text
                 <View>
-                    {/*<Text>Total amount {!totalAmountTodoList ? 'totalAmountTodoList' : totalAmountTodoList}</Text>*/}
+                    <Text>Total amount: {getTodo.length}</Text>
                 </View>
                 <View>
-                    TODO: Transfer button
-                    {/*<Button onPress={() => {*/}
-                    {/*    clearTodoList()*/}
-                    {/*}}*/}
-                    {/*    style={{backgroundColor: '#00b7ad', borderRadius: 50}}>*/}
-                    {/*    <Text>Clear</Text>*/}
-                    {/*</Button>*/}
+                    <Button onPress={() => {
+                        clearTodos()
+                    }}
+                        style={{backgroundColor: '#00b7ad', borderRadius: 50}}>
+                        <Text>Clear</Text>
+                    </Button>
                 </View>
                 <View>
                     <Button onPress={() => {
                         createTodoList()
                     }}
-                            style={{backgroundColor: '#00b7ad', borderRadius: 50}}>
+                        style={{backgroundColor: '#00b7ad', borderRadius: 50}}>
                         <Text>Create Todo</Text>
                     </Button>
                 </View>
@@ -71,7 +72,6 @@ export const HomeScreen = ({navigation}) => {
                         complete={() => completeTodoItem(item.id)}
                         dataTodo={getTodo}
                         renderPicker={renderPickerOptions()}
-                        // colorTodo={color}
                         item={item}/>
                     }
                 />
@@ -99,10 +99,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginRight: 5,
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
     }
 
 });
-// HomeScreen.navigationOptions = {
-//   headerTitle: 'Home Screen'
-// }

@@ -1,5 +1,5 @@
 /* генераторы экшенов */
-import {ADD_TODO, COMPLETED_TODO, REMOVE_TODO, SET_PRIORITY_TO_TASK} from '../types';
+import {ADD_TODO, CLEAR_TODO_LIST, COMPLETED_TODO, REMOVE_TODO, SET_PRIORITY_TO_TASK} from '../types';
 
 export const addTodo = (id, text, color, count) => {
   return {
@@ -40,20 +40,9 @@ export const setPriorityTodo = (id, selectedValue) => {
     },
   };
 };
+export const clearTodoList = () => {
+  return {
+    type: CLEAR_TODO_LIST,
+  };
+};
 
-
-// export const removeUser = id => async dispatch => {
-//   await DB.removeUser(id);
-//   dispatch({
-//     type: 'REMOVE_USER',
-//     payload: id,
-//   });
-// };
-
-// export const toggleTodo = (index) => {
-//   return { type: TOGGLE_TODO, index }
-// }
-//
-// export const setVisibilityFilter = (filter) => {
-//   return { type: SET_VISIBILITY_FILTER, filter }
-// }

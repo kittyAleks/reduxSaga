@@ -10,14 +10,11 @@ import {HomeScreen} from "./HomeScreen";
 
 export const CreateTodoListScreen = ({navigation}) => {
     const backgroundTodoColor = ['#f12323', '#ff7200', '#ffdd00', '#44ff00', '#00ffea', '#446bd6', '#ef72cb']
-    const [count, setCount] = useState(0)
 
     const [text, setText] = useState('')
     const [color, setColor] = useState(backgroundTodoColor[0])
 
     const dispatch = useDispatch()
-    // const currentItem = useSelector(state => state.todos.allTodos)
-    // console.log('WWWWW_currentItem', currentItem)
 
     const changeText = text => {
         setText(text);
@@ -26,23 +23,18 @@ export const CreateTodoListScreen = ({navigation}) => {
         if (text.trim()) {
             dispatch(addTodo(uuidv4(), text, color, count))
             setText('')
-            // setCount(count + 1)
             navigation.navigate('HomeScreen')
         } else {
             Alert.alert('Поле не может быть пустым')
         }
     };
 
-    const clearTodoList = () => {
-        setCount(0)
-    }
-
     const renderColor = () => {
         return backgroundTodoColor.map(color => {
             return <TouchableOpacity key={color} style={[styles.backgroundColorSelect, {backgroundColor: color}]}
-                                     onPress={() => {
-                                         setColor(color)
-                                     }}>
+                onPress={() => {
+                    setColor(color)
+                }}>
             </TouchableOpacity>
         })
     }
@@ -50,15 +42,6 @@ export const CreateTodoListScreen = ({navigation}) => {
     return (
         <Container style={styles.container}>
             <View style={styles.inputGroupContainer}>
-                <Text>{count}</Text>
-
-                <Button onPress={() => {
-                    clearTodoList()
-                }}
-                    style={{paddingHorizontal: 20, backgroundColor: '#00b7ad', borderRadius: 20}}>
-                    <Text>Clear</Text>
-                </Button>
-
                 <InputGroup style={{marginTop: 6, marginBottom: 10}} borderType='regular'>
                     <Input
                         style={styles.inputStyle}
@@ -89,7 +72,6 @@ export const CreateTodoListScreen = ({navigation}) => {
                     </Text>
                 </Button>
             </View>
-
         </Container>
     )
 }
@@ -124,5 +106,4 @@ const styles = StyleSheet.create({
         marginRight: 10,
         marginVertical: 20,
     }
-
 });

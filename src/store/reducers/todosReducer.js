@@ -1,4 +1,4 @@
-import {SET_PRIORITY_TO_TASK, ADD_TODO, COMPLETED_TODO, REMOVE_TODO} from '../types';
+import {SET_PRIORITY_TO_TASK, ADD_TODO, COMPLETED_TODO, REMOVE_TODO, CLEAR_TODO_LIST} from '../types';
 
 const initialState = {
     allTodos: [],
@@ -49,6 +49,12 @@ export const todosReducer = (state = initialState, action) => {
                     ...todo,
                     selectedValue: action.payload.selectedValue,
                 }) : todo)
+            }
+        }
+        case CLEAR_TODO_LIST: {
+            return {
+                ...state,
+                allTodos: []
             }
         }
 

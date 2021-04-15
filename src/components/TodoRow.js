@@ -1,5 +1,5 @@
-import React, {useCallback, useState} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity, Dimensions} from 'react-native';
+import React, {useCallback} from 'react';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch} from 'react-redux';
 import {Picker} from "@react-native-community/picker";
@@ -7,8 +7,6 @@ import {Picker} from "@react-native-community/picker";
 import {setPriorityTodo} from "../store/action/todosActions";
 
 export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
-    // const {width} = Dimensions.get('window');
-    // const pickerWidth = width / 2;
     const dispatch = useDispatch()
 
     const valueChange = (id, selectedValue) => {
@@ -17,7 +15,6 @@ export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
 
     return (
         <View style={styles.mainWrapper}>
-
             <View style={[styles.rowContainer, {backgroundColor: item.color}]}
                   key={rowID}>
                 <View style={styles.todoRoWrapper}>
@@ -46,7 +43,6 @@ export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
                     </TouchableOpacity>
                 </View>
             </View>
-
         </View>
     );
 };
@@ -76,5 +72,4 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 18,
     },
-
 });
