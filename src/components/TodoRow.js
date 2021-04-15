@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 import {Picker} from "@react-native-community/picker";
 import {setPriorityTodo} from "../store/action/todosActions";
 
-export const TodoRow = ({item, rowID, remove, complete, renderPicker, colorTodo}) => {
+export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
   const {width} = Dimensions.get('window');
   const pickerWidth = width / 2;
   const dispatch = useDispatch()
@@ -15,13 +15,9 @@ export const TodoRow = ({item, rowID, remove, complete, renderPicker, colorTodo}
     dispatch(setPriorityTodo(id, selectedValue))
   }
 
-  // const valueChange = useCallback((id, selectedValue) => {
-  //   dispatch(setPriorityTodo(id, selectedValue))
-  // },[dispatch])
-
   return (
     <View style={{paddingHorizontal: 15}}>
-      <View style={[styles.viewContainer, {backgroundColor: colorTodo}]}
+      <View style={[styles.viewContainer, {backgroundColor: item.color}]}
             key={rowID}>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
 
