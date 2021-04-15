@@ -2,10 +2,10 @@ import React from 'react'
 import {View, StyleSheet, FlatList} from 'react-native';
 import {Container, Text, Button} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
+import {Picker} from "@react-native-community/picker";
 
 import {TodoRow} from '../components/TodoRow';
 import {completedTodo, removeTodo} from '../store/action/todosActions';
-import {Picker} from "@react-native-community/picker";
 
 export const HomeScreen = ({navigation}) => {
 
@@ -39,10 +39,12 @@ export const HomeScreen = ({navigation}) => {
     return (
         <Container style={styles.container}>
             <View style={styles.todoListContainer}>
+                TODO: Transfer text
                 <View>
                     {/*<Text>Total amount {!totalAmountTodoList ? 'totalAmountTodoList' : totalAmountTodoList}</Text>*/}
                 </View>
                 <View>
+                    TODO: Transfer button
                     {/*<Button onPress={() => {*/}
                     {/*    clearTodoList()*/}
                     {/*}}*/}

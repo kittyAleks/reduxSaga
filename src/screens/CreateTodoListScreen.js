@@ -1,11 +1,12 @@
 import React, {useState} from 'react'
-
 import {View, Text, Alert, StyleSheet, TouchableOpacity} from 'react-native'
 import {Button, Container, Input, InputGroup} from "native-base";
-import {HomeScreen} from "./HomeScreen";
 import {useDispatch, useSelector} from "react-redux";
-import {addTodo} from "../store/action/todosActions";
 import {v4 as uuidv4} from "uuid";
+
+import {addTodo} from "../store/action/todosActions";
+import {HomeScreen} from "./HomeScreen";
+
 
 export const CreateTodoListScreen = ({navigation}) => {
     const backgroundTodoColor = ['#f12323', '#ff7200', '#ffdd00', '#44ff00', '#00ffea', '#446bd6', '#ef72cb']
