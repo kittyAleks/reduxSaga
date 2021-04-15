@@ -1,14 +1,13 @@
 /* генераторы экшенов */
 import {ADD_TODO, CLEAR_TODO_LIST, COMPLETED_TODO, REMOVE_TODO, SET_PRIORITY_TO_TASK} from '../types';
 
-export const addTodo = (id, text, color, count) => {
+export const addTodo = (id, text, color) => {
   return {
     type: ADD_TODO,
     payload: {
       id,
       text,
       color,
-      count,
     },
   };
 };

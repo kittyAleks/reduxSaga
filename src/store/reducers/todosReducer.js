@@ -25,7 +25,6 @@ export const todosReducer = (state = initialState, action) => {
                         text: action.payload.text,
                         completed: false,
                         color: action.payload.color,
-                        count: action.payload.count
                     },
 
                     ...state.allTodos,

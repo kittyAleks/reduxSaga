@@ -21,7 +21,7 @@ export const CreateTodoListScreen = ({navigation}) => {
     }
     const handleAddTodo = (text) => {
         if (text.trim()) {
-            dispatch(addTodo(uuidv4(), text, color, count))
+            dispatch(addTodo(uuidv4(), text, color))
             setText('')
             navigation.navigate('HomeScreen')
         } else {
