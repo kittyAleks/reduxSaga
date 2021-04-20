@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {View, StyleSheet, FlatList} from 'react-native';
 import {Container, Text, Button} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
@@ -6,6 +6,7 @@ import {Picker} from "@react-native-community/picker";
 
 import {TodoRow} from '../components/TodoRow';
 import {clearTodoList, completedTodo, removeTodo} from '../store/action/todosActions';
+import {fetchTodo} from "../store/reducers/TodoState";
 
 export const HomeScreen = ({navigation}) => {
 
@@ -29,6 +30,10 @@ export const HomeScreen = ({navigation}) => {
         dispatch(clearTodoList())
     }
 
+    useEffect(() => {
+        dispatch(fetchTodo())
+    }, [dispatch]);
+
     const renderPickerOptions = () => {
         let pickerItems = [];
         pickerItems.push(
@@ -42,9 +47,6 @@ export const HomeScreen = ({navigation}) => {
     return (
         <Container style={styles.container}>
             <View style={styles.todoListContainer}>
-                <View>
-                    <Text>Total amount: {getTodo.length}</Text>
-                </View>
                 <View>
                     <Button onPress={() => {
                         clearTodos()
@@ -81,14 +83,7 @@ export const HomeScreen = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-    inputStyle: {
-        borderWidth: 1,
-        paddingLeft: 10,
-        paddingBottom: 5,
-        borderRadius: 5,
-        borderColor: '#c9c9c9',
-        height: 40,
-    },
+
     container: {
         backgroundColor: 'white',
         paddingVertical: 20,

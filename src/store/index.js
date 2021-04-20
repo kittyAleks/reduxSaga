@@ -3,6 +3,7 @@ import {todosReducer} from './reducers/todosReducer';
 import {createMigrate, persistReducer, persistStore} from 'redux-persist';
 import AsyncStorage from '@react-native-community/async-storage';
 import reduxLogger from 'redux-logger';
+import thunk from "redux-thunk";
 
 const composeEnhancers = __DEV__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
 
@@ -40,7 +41,7 @@ export const persistConfig = {
 
 const persistingReducer = persistReducer(persistConfig, rootReducer);
 
-export const store = createStore(persistingReducer, composeEnhancers(applyMiddleware(reduxLogger)));
+export const store = createStore(persistingReducer, composeEnhancers(applyMiddleware(thunk, reduxLogger)));
 export const persistor = persistStore(store, persistingReducer);
 export const {dispatch} = store;
 

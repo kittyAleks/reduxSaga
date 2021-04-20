@@ -1,14 +1,17 @@
 /* генераторы экшенов */
 import {ADD_TODO, CLEAR_TODO_LIST, COMPLETED_TODO, REMOVE_TODO, SET_PRIORITY_TO_TASK} from '../types';
 
-export const addTodo = (id, text, color) => {
+export const todosFetchDataSuccess = (fetchTodos) => {
+  return {
+    type: 'TODOS_FETCH_DATA_SUCCESS',
+    payload: fetchTodos,
+  }
+}
+
+export const addTodo = (newTodo) => {
   return {
     type: ADD_TODO,
-    payload: {
-      id,
-      text,
-      color,
-    },
+    payload: newTodo
   };
 };
 

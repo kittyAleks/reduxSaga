@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React, {useCallback, useEffect, useState} from 'react'
 import {View, Text, Alert, StyleSheet, TouchableOpacity} from 'react-native'
 import {Button, Container, Input, InputGroup} from "native-base";
 import {useDispatch, useSelector} from "react-redux";
 import {v4 as uuidv4} from "uuid";
 
-import {addTodo} from "../store/action/todosActions";
 import {HomeScreen} from "./HomeScreen";
+import {createNewTodo} from "../store/reducers/TodoState";
 
 
 export const CreateTodoListScreen = ({navigation}) => {
@@ -19,9 +19,16 @@ export const CreateTodoListScreen = ({navigation}) => {
     const changeText = text => {
         setText(text);
     }
-    const handleAddTodo = (text) => {
+
+    const handleAddTodo = async (text) => {
         if (text.trim()) {
-            dispatch(addTodo(uuidv4(), text, color))
+        const newTodo = {
+            id: new Date().toJSON(),
+            body: text,
+            color: color,
+            priority: uuidv4(),
+        }
+            dispatch(createNewTodo(newTodo))
             setText('')
             navigation.navigate('HomeScreen')
         } else {
