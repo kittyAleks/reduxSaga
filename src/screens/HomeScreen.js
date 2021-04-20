@@ -6,7 +6,7 @@ import {Picker} from "@react-native-community/picker";
 
 import {TodoRow} from '../components/TodoRow';
 import {clearTodoList, completedTodo, removeTodo} from '../store/action/todosActions';
-import {fetchTodo} from "../store/reducers/TodoState";
+import {deleteTodo, fetchTodo} from "../store/reducers/TodoState";
 
 export const HomeScreen = ({navigation}) => {
 
@@ -17,7 +17,7 @@ export const HomeScreen = ({navigation}) => {
     const getTodo = useSelector(state => state.todos.allTodos)
 
     const removeTodoItem = (id) => {
-        dispatch(removeTodo(id))
+        dispatch(deleteTodo(id))
     };
 
     const completeTodoItem = (id) => {
