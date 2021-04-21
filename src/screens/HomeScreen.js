@@ -5,8 +5,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Picker} from "@react-native-community/picker";
 
 import {TodoRow} from '../components/TodoRow';
-import {clearTodoList, completedTodo, removeTodo} from '../store/action/todosActions';
-import {deleteTodo, fetchTodo} from "../store/reducers/TodoState";
+import {clearTodoList, completedTodo} from '../store/action/todosActions';
+import {clearAllTodos, deleteTodo, fetchTodo} from "../store/reducers/TodoState";
+import {CreateTodoListScreen} from "./CreateTodoListScreen";
 
 export const HomeScreen = ({navigation}) => {
 
@@ -27,7 +28,7 @@ export const HomeScreen = ({navigation}) => {
         navigation.navigate('CreateTodoListScreen', )
     }
     const clearTodos = () => {
-        dispatch(clearTodoList())
+        dispatch(clearAllTodos())
     }
 
     useEffect(() => {
@@ -46,7 +47,7 @@ export const HomeScreen = ({navigation}) => {
 
     return (
         <Container style={styles.container}>
-            <View style={styles.todoListContainer}>
+            <View style={styles.buttonContainer}>
                 <View>
                     <Button onPress={() => {
                         clearTodos()
@@ -69,6 +70,7 @@ export const HomeScreen = ({navigation}) => {
                 <FlatList
                     data={getTodo}
                     keyExtractor={(item) => item.id}
+                    numColumns={2}
                     renderItem={({item}) => <TodoRow
                         remove={() => removeTodoItem(item.id)}
                         complete={() => completeTodoItem(item.id)}
@@ -83,17 +85,15 @@ export const HomeScreen = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-
     container: {
         backgroundColor: 'white',
         paddingVertical: 20,
         flex: 1,
+        borderWidth: 1,
+        borderColor: 'red',
     },
-    todoListContainer: {
+    buttonContainer: {
         flexDirection: 'row',
-        paddingHorizontal: 10,
-        marginRight: 5,
-        alignItems: 'center',
         justifyContent: 'space-around',
     }
 

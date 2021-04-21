@@ -107,10 +107,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     backgroundColorSelect: {
-        width: 35,
-        height: 35,
-        borderRadius: 50,
-        marginRight: 10,
+        width: 38,
+        height: 38,
+        borderRadius: 10,
+        marginRight: 12,
         marginVertical: 20,
     }
 });
