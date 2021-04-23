@@ -1,12 +1,25 @@
 import React, {useCallback} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity, Dimensions, SafeAreaView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch} from 'react-redux';
 import {Picker} from "@react-native-community/picker";
 
 import {setPriorityTodo} from "../store/action/todosActions";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
-export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
+const guidelineBaseWidth = 375; // ширина экрана
+// const width = Dimensions.get('window').width
+const {width} = Dimensions.get('window')
+console.log('AAAA_width', width)
+export const scale = size => {
+    console.log('AAAA_size', Math.round(width / guidelineBaseWidth * size))
+    Math.round(width / guidelineBaseWidth * size);
+}
+
+
+// const {width} = Dimensions.get('screen')
+// console.log('AAA_width', width)
+export const TodoRow = ({item, rowID, remove, complete, renderPicker, openNewScreen}) => {
     const dispatch = useDispatch()
 
     const valueChange = (id, selectedValue) => {
@@ -15,7 +28,7 @@ export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
 
     return (
         <View style={styles.mainTodosWrapper}>
-            <View style={[styles.todoWrapper, {backgroundColor: item.color}]}
+            <TouchableOpacity onPress={openNewScreen} style={[styles.todoWrapper, {backgroundColor: item.color}]}
                   key={rowID}>
                 <View style={styles.todoTextIconWrapper}>
                     <TouchableOpacity onPress={complete}>
@@ -40,31 +53,31 @@ export const TodoRow = ({item, rowID, remove, complete, renderPicker}) => {
                         {renderPicker}
                     </Picker>
                 </View>
-
-            </View>
+            </TouchableOpacity>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     mainTodosWrapper: {
-        paddingHorizontal: 10,
+        // marginHorizontal: 9
     },
     todoWrapper: {
         backgroundColor: '#e0d7d7',
-        paddingHorizontal: 20,
-        marginVertical: 10,
+        paddingHorizontal: scale(10),
+        marginHorizontal: 4.5,
+        marginVertical: 4.5,
         borderWidth: 1,
-        borderColor: '#868b9b',
+        borderColor: '#447e2f',
         borderRadius: 20,
         width: 167,
         height: 167,
-
     },
     todoTextIconWrapper: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginHorizontal: 5
+        marginHorizontal: 5,
+
     },
     textCompleted: {
         textDecorationLine: 'line-through',

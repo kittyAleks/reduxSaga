@@ -1,56 +1,77 @@
 import React from 'react'
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {Text, View} from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 /* Components */
 
 import {HomeScreen} from '../screens/HomeScreen';
 import {CreateTodoListScreen} from '../screens/CreateTodoListScreen';
 import {SettingsScreen} from '../screens/SettingsScreen';
+import {TaskDescriptionScreen} from "../screens/TaskDescriptionScreen";
 
 const defaultOptions = {
-    headerStyle: {
-      backgroundColor: '#b3e2c5',
-    },
-    headerTintColor: '#fff',
+    // headerStyle: {
+    //     backgroundColor: '#b3e2c5',
+    // },
+    headerTintColor: 'red',
     headerTitleStyle: {
         fontSize: 20,
         color: 'black'
-    }
+    },
 };
 
 const optionsMainScreenHeader = {
     headerTitle: 'Заметки',
-    // headerRight: () => <HeaderButtons>
-    //     <Ionicons style={{paddingRight: 10}}
-    //               name='ios-basket' color='white' size={23} />
-    // </HeaderButtons>,
-    // headerLeft: () => <HeaderButtons>
-    //   <Ionicons onPress={() => alert('Hello')} style={{paddingLeft: 20}}  name='ios-menu' color='white' size={25} />
-    // </HeaderButtons>
+    headerBackTitleVisible: false,
+    headerTransparent: true,
+
+     // headerRight: () =>
+    //     <Ionicons style={{paddingRight: 11}}
+    //               name='ios-basket' color='black' size={23}/>,
+    headerBackImage: () =>
+        <Ionicons style={{paddingLeft: 17}} name='arrow-back' color='black' size={25}/>,
 };
 
 const RootStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export const RootStackScreen = () => (
-    <RootStack.Navigator>
-        <RootStack.Screen name='HomeScreen' options={{
-            // headerShown: true,
-            // headerTitle: 'Home Screen',
-            ...optionsMainScreenHeader,
-            ...defaultOptions,
-        }} component={HomeScreen}/>
+    <SafeAreaProvider>
+        <RootStack.Navigator>
+            <RootStack.Screen name='HomeScreen' options={{
+                // headerShown: true,
+                // headerTitle: 'Home Screen',
+                ...defaultOptions,
+                ...optionsMainScreenHeader,
+            }} component={HomeScreen}/>
 
-        <RootStack.Screen
-            name='CreateTodoListScreen'
-            component={CreateTodoListScreen}
-            options={{
-                headerTitle: 'Заметки',
-                ...defaultOptions
-            }}
-        />
-    </RootStack.Navigator>
+            <RootStack.Screen
+                name='CreateTodoListScreen'
+                component={CreateTodoListScreen}
+                options={{
+                    headerTitle: null,
+                    ...optionsMainScreenHeader,
+                    ...defaultOptions,
+                }}
+                screenOptions={{
+                    headerTitle: null,
+                }}
+            />
+            <RootStack.Screen
+                name='TaskDescriptionScreen'
+                component={TaskDescriptionScreen}
+                options={{
+                    ...optionsMainScreenHeader,
+                    ...defaultOptions,
+                    headerTitle: () => null,
+                }}
+            />
+        </RootStack.Navigator>
+    </SafeAreaProvider>
+
 );
 
 
@@ -80,22 +101,15 @@ export const RootStackScreen = () => (
 //         fontSize: 30,
 //       }}
 //     />
-{/*<Tab.Screen*/
-}
-{/*  name='CreateTodoListScreen'*/
-}
-{/*  component={CreateTodoListScreen}*/
-}
-{/*  options={{*/
-}
-{/*    tabBarLabel: 'TodoList'*/
-}
-{/*    // tabBarIcon: () => ()*/
-}
-{/*  }}*/
-}
-{/*/>*/
-}
+// <Tab.Screen
+//  name='CreateTodoListScreen'
+//  component={CreateTodoListScreen}
+//   options={{
+//    tabBarLabel: 'TodoList'
+//   tabBarIcon: () => ()
+// }}
+// />
+
 // </Tab.Navigator>
 // );
 

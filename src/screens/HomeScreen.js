@@ -1,15 +1,22 @@
-import React, {useEffect} from 'react'
-import {View, StyleSheet, FlatList} from 'react-native';
+import React, {useEffect, useState} from 'react'
+import {View, StyleSheet, FlatList, Dimensions, TouchableOpacity, Alert} from 'react-native';
 import {Container, Text, Button} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
 import {Picker} from "@react-native-community/picker";
+import { useHeaderHeight } from '@react-navigation/stack';
 
 import {TodoRow} from '../components/TodoRow';
 import {clearTodoList, completedTodo} from '../store/action/todosActions';
-import {clearAllTodos, deleteTodo, fetchTodo} from "../store/reducers/TodoState";
+import {clearAllTodos, createNewTodo, deleteTodo, fetchTodo} from "../store/reducers/TodoState";
 import {CreateTodoListScreen} from "./CreateTodoListScreen";
+import AntDesign from "react-native-vector-icons/AntDesign";
+
+const {width} = Dimensions.get('screen');
 
 export const HomeScreen = ({navigation}) => {
+    const backgroundTodoColor = ['#FF8B66', '#FFD466', '#C566FF', '#669AFF', '#CEFF66'];
+    const [color, setColor] = useState(backgroundTodoColor[0])
+    const headerHeight = useHeaderHeight();
 
     const Item = Picker.Item;
 
@@ -17,6 +24,20 @@ export const HomeScreen = ({navigation}) => {
 
     const getTodo = useSelector(state => state.todos.allTodos)
 
+    const renderColor = () => {
+        return backgroundTodoColor.map(color => {
+            return <TouchableOpacity key={color} style={[styles.backgroundColorSelect, {backgroundColor: color}]}
+                onPress={() => {
+                 handleAddTodo(color)
+                }}
+            >
+            </TouchableOpacity>
+        })
+    }
+    const handleAddTodo = (color) => {
+        setColor(color)
+        navigation.navigate('TaskDescriptionScreen', {color})
+    };
     const removeTodoItem = (id) => {
         dispatch(deleteTodo(id))
     };
@@ -25,10 +46,16 @@ export const HomeScreen = ({navigation}) => {
         dispatch(completedTodo(id))
     }
     const createTodoList = () => {
-        navigation.navigate('CreateTodoListScreen', )
+        navigation.navigate('CreateTodoListScreen',)
     }
     const clearTodos = () => {
         dispatch(clearAllTodos())
+    }
+    const openNewScreen = (item) => {
+        const {body} = item;
+        console.log('navigation_body', body)
+
+        navigation.navigate('TaskDescriptionScreen', {body})
     }
 
     useEffect(() => {
@@ -46,55 +73,79 @@ export const HomeScreen = ({navigation}) => {
     }
 
     return (
-        <Container style={styles.container}>
-            <View style={styles.buttonContainer}>
-                <View>
-                    <Button onPress={() => {
-                        clearTodos()
-                    }}
-                        style={{backgroundColor: '#00b7ad', borderRadius: 50}}>
-                        <Text>Clear</Text>
-                    </Button>
+            <View style={[styles.container, {backgroundColor: 'white'}]}>
+                {/*<View style={styles.buttonContainer}>*/}
+                {/*    <View>*/}
+                {/*        <Button onPress={() => {*/}
+                {/*            clearTodos()*/}
+                {/*        }}*/}
+                {/*            style={{backgroundColor: '#00b7ad', borderRadius: 50}}>*/}
+                {/*            <Text>Clear</Text>*/}
+                {/*        </Button>*/}
+                {/*    </View>*/}
+                {/*    <View>*/}
+                {/*        <Button onPress={() => {*/}
+                {/*            createTodoList()*/}
+                {/*        }}*/}
+                {/*            style={{backgroundColor: '#00b7ad', borderRadius: 50}}>*/}
+                {/*            <Text>Create Todo</Text>*/}
+                {/*        </Button>*/}
+                {/*    </View>*/}
+                {/*</View>*/}
+
+                <View style={[styles.flatListContainer, {marginTop: headerHeight}]}>
+                    <FlatList
+                        data={getTodo}
+                        keyExtractor={(item) => item.id}
+                        numColumns={2}
+
+                        renderItem={({item}) => <TodoRow
+                            openNewScreen={() => openNewScreen(item)}
+                            remove={() => removeTodoItem(item.id)}
+                            complete={() => completeTodoItem(item.id)}
+                            dataTodo={getTodo}
+                            renderPicker={renderPickerOptions()}
+                            item={item}/>
+                        }
+                    />
                 </View>
-                <View>
-                    <Button onPress={() => {
+                <View style={styles.colorContainer}>{renderColor()}</View>
+
+                <TouchableOpacity
+                    onPress={() => {
                         createTodoList()
                     }}
-                        style={{backgroundColor: '#00b7ad', borderRadius: 50}}>
-                        <Text>Create Todo</Text>
-                    </Button>
-                </View>
-            </View>
+                    style={{alignItems: 'center', alignSelf: 'center', position: 'absolute', bottom: 33}}>
+                    <AntDesign name='pluscircle' color='black' size={56}/>
+                </TouchableOpacity>
 
-            <View style={{flex: 1}}>
-                <FlatList
-                    data={getTodo}
-                    keyExtractor={(item) => item.id}
-                    numColumns={2}
-                    renderItem={({item}) => <TodoRow
-                        remove={() => removeTodoItem(item.id)}
-                        complete={() => completeTodoItem(item.id)}
-                        dataTodo={getTodo}
-                        renderPicker={renderPickerOptions()}
-                        item={item}/>
-                    }
-                />
             </View>
-        </Container>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white',
-        paddingVertical: 20,
         flex: 1,
-        borderWidth: 1,
-        borderColor: 'red',
     },
-    buttonContainer: {
+    flatListContainer: {
+        width: width,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    colorContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
-    }
-
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        marginHorizontal: 56,
+        borderRadius: 14,
+        position: 'absolute',
+        bottom: 106,
+    },
+    backgroundColorSelect: {
+        width: 38,
+        height: 38,
+        borderRadius: 10,
+        marginHorizontal: 6,
+        marginVertical: 12,
+    },
 });

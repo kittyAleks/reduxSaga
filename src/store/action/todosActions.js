@@ -9,6 +9,7 @@ export const todosFetchDataSuccess = (fetchTodos) => {
 }
 
 export const addTodo = (newTodo) => {
+  console.log('QQQ_newTodo', newTodo)
   return {
     type: ADD_TODO,
     payload: newTodo
