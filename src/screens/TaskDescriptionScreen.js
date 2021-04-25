@@ -29,14 +29,15 @@ export const TaskDescriptionScreen = ({navigation, route}) => {
     const addNewTodo = (text, color) => {
         if (text.trim()) {
         const newTodo = {
-            id: new Date().toJSON(),
+            id: uuidv4(),
             body: text,
             color: color,
             priority: uuidv4(),
+            createdAt: (+new Date())
         }
         dispatch(createNewTodo(newTodo))
         setText('')
-        navigation.navigate('TaskDescriptionScreen', {color, text})
+        navigation.navigate('HomeScreen', {color, text})
         } else {
             Alert.alert('Поле не может быть пустым')
         }

@@ -16,6 +16,9 @@ const {width} = Dimensions.get('screen');
 export const HomeScreen = ({navigation}) => {
     const backgroundTodoColor = ['#FF8B66', '#FFD466', '#C566FF', '#669AFF', '#CEFF66'];
     const [color, setColor] = useState(backgroundTodoColor[0])
+    const [isVisibleColorContainer, setIsVisibleColorContainer] = useState(false)
+    const [name, setName] = useState('pluscircle')
+
     const headerHeight = useHeaderHeight();
 
     const Item = Picker.Item;
@@ -37,6 +40,7 @@ export const HomeScreen = ({navigation}) => {
     const handleAddTodo = (color) => {
         setColor(color)
         navigation.navigate('TaskDescriptionScreen', {color})
+        setIsVisibleColorContainer(false)
     };
     const removeTodoItem = (id) => {
         dispatch(deleteTodo(id))
@@ -73,53 +77,53 @@ export const HomeScreen = ({navigation}) => {
     }
 
     return (
-            <View style={[styles.container, {backgroundColor: 'white'}]}>
-                {/*<View style={styles.buttonContainer}>*/}
-                {/*    <View>*/}
-                {/*        <Button onPress={() => {*/}
-                {/*            clearTodos()*/}
-                {/*        }}*/}
-                {/*            style={{backgroundColor: '#00b7ad', borderRadius: 50}}>*/}
-                {/*            <Text>Clear</Text>*/}
-                {/*        </Button>*/}
-                {/*    </View>*/}
-                {/*    <View>*/}
-                {/*        <Button onPress={() => {*/}
-                {/*            createTodoList()*/}
-                {/*        }}*/}
-                {/*            style={{backgroundColor: '#00b7ad', borderRadius: 50}}>*/}
-                {/*            <Text>Create Todo</Text>*/}
-                {/*        </Button>*/}
-                {/*    </View>*/}
-                {/*</View>*/}
+        <View style={[styles.container, {backgroundColor: 'white'}]}>
+            {/*<View style={styles.buttonContainer}>*/}
+            {/*    <View>*/}
+            {/*        <Button onPress={() => {*/}
+            {/*            clearTodos()*/}
+            {/*        }}*/}
+            {/*            style={{backgroundColor: '#00b7ad', borderRadius: 50}}>*/}
+            {/*            <Text>Clear</Text>*/}
+            {/*        </Button>*/}
+            {/*    </View>*/}
+            {/*    <View>*/}
+            {/*        <Button onPress={() => {*/}
+            {/*            createTodoList()*/}
+            {/*        }}*/}
+            {/*            style={{backgroundColor: '#00b7ad', borderRadius: 50}}>*/}
+            {/*            <Text>Create Todo</Text>*/}
+            {/*        </Button>*/}
+            {/*    </View>*/}
+            {/*</View>*/}
 
-                <View style={[styles.flatListContainer, {marginTop: headerHeight}]}>
-                    <FlatList
-                        data={getTodo}
-                        keyExtractor={(item) => item.id}
-                        numColumns={2}
-
-                        renderItem={({item}) => <TodoRow
-                            openNewScreen={() => openNewScreen(item)}
-                            remove={() => removeTodoItem(item.id)}
-                            complete={() => completeTodoItem(item.id)}
-                            dataTodo={getTodo}
-                            renderPicker={renderPickerOptions()}
-                            item={item}/>
-                        }
-                    />
-                </View>
+            <View style={[styles.flatListContainer, {marginTop: headerHeight}]}>
+                <FlatList
+                    data={getTodo}
+                    keyExtractor={(item) => item.id}
+                    numColumns={2}
+                    renderItem={({item}) => <TodoRow
+                        openNewScreen={() => openNewScreen(item)}
+                        remove={() => removeTodoItem(item.id)}
+                        complete={() => completeTodoItem(item.id)}
+                        dataTodo={getTodo}
+                        renderPicker={renderPickerOptions()}
+                        item={item}/>
+                    }
+                />
+            </View>
+            {isVisibleColorContainer &&
                 <View style={styles.colorContainer}>{renderColor()}</View>
-
+            }
                 <TouchableOpacity
                     onPress={() => {
-                        createTodoList()
+                        setIsVisibleColorContainer(!isVisibleColorContainer)
                     }}
                     style={{alignItems: 'center', alignSelf: 'center', position: 'absolute', bottom: 33}}>
-                    <AntDesign name='pluscircle' color='black' size={56}/>
+                    <AntDesign name={isVisibleColorContainer ? 'closecircle' : name}  color='black' size={56}/>
                 </TouchableOpacity>
 
-            </View>
+        </View>
     )
 }
 

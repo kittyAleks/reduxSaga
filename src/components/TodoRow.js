@@ -1,8 +1,9 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Dimensions, SafeAreaView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch} from 'react-redux';
 import {Picker} from "@react-native-community/picker";
+import moment from 'moment';
 
 import {setPriorityTodo} from "../store/action/todosActions";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -10,17 +11,17 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 const guidelineBaseWidth = 375; // ширина экрана
 // const width = Dimensions.get('window').width
 const {width} = Dimensions.get('window')
-console.log('AAAA_width', width)
 export const scale = size => {
-    console.log('AAAA_size', Math.round(width / guidelineBaseWidth * size))
     Math.round(width / guidelineBaseWidth * size);
 }
 
-
-// const {width} = Dimensions.get('screen')
-// console.log('AAA_width', width)
 export const TodoRow = ({item, rowID, remove, complete, renderPicker, openNewScreen}) => {
+    console.log('QQQ_item', item)
     const dispatch = useDispatch()
+    const currentDate = moment(item.createdAt).format("D.MM.Y");
+    console.log('QQQ_currentDate', currentDate)
+
+    // const [currentDate, setCurrentDate] = useState('');
 
     const valueChange = (id, selectedValue) => {
         dispatch(setPriorityTodo(id, selectedValue))
@@ -29,30 +30,35 @@ export const TodoRow = ({item, rowID, remove, complete, renderPicker, openNewScr
     return (
         <View style={styles.mainTodosWrapper}>
             <TouchableOpacity onPress={openNewScreen} style={[styles.todoWrapper, {backgroundColor: item.color}]}
-                  key={rowID}>
-                <View style={styles.todoTextIconWrapper}>
+                              key={rowID}>
+                <View style={styles.todoTextWrapper}>
                     <TouchableOpacity onPress={complete}>
                         <Text
                             style={StyleSheet.flatten([styles.text, item.completed && styles.textCompleted])}>
                             {item.body}
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Ionicons
-                            onPress={remove}
-                            // style={{color: 'red'}}
-                            name='close-outline'
-                            color='#b5b5b5'
-                            size={25}/>
-                    </TouchableOpacity>
+                    <View style={{
+                        flexDirection: 'row', alignItems: 'center', paddingTop: 100,
+                        justifyContent: 'space-around'
+                    }}>
+                        <Text style={{paddingRight: 53, color: 'black', opacity: 0.6, marginLeft: 16}}>{currentDate}</Text>
+                        <TouchableOpacity>
+                            <Ionicons
+                                onPress={remove}
+                                style={{color: 'black', opacity: 0.6, marginRight: 8}}
+                                name='ellipsis-horizontal-circle-sharp'
+                                size={30}/>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={styles.pickerStyle}>
-                    <Picker style={{height: 100}} itemStyle={{height: 120, color: 'white'}}
-                        selectedValue={item.selectedValue}
-                        onValueChange={(selectedValue) => valueChange(item.id, selectedValue)}>
-                        {renderPicker}
-                    </Picker>
-                </View>
+                {/*<View style={styles.pickerStyle}>*/}
+                {/*    <Picker style={{height: 100}} itemStyle={{height: 120, color: 'white'}}*/}
+                {/*        selectedValue={item.selectedValue}*/}
+                {/*        onValueChange={(selectedValue) => valueChange(item.id, selectedValue)}>*/}
+                {/*        {renderPicker}*/}
+                {/*    </Picker>*/}
+                {/*</View>*/}
             </TouchableOpacity>
         </View>
     );
@@ -60,11 +66,12 @@ export const TodoRow = ({item, rowID, remove, complete, renderPicker, openNewScr
 
 const styles = StyleSheet.create({
     mainTodosWrapper: {
-        // marginHorizontal: 9
+        // paddingHorizontal: 8,
     },
     todoWrapper: {
+        flex: 1,
         backgroundColor: '#e0d7d7',
-        paddingHorizontal: scale(10),
+        paddingHorizontal: scale(8),
         marginHorizontal: 4.5,
         marginVertical: 4.5,
         borderWidth: 1,
@@ -73,10 +80,11 @@ const styles = StyleSheet.create({
         width: 167,
         height: 167,
     },
-    todoTextIconWrapper: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginHorizontal: 5,
+    todoTextWrapper: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingHorizontal: 8,
+        paddingVertical: 8,
 
     },
     textCompleted: {
@@ -87,8 +95,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: 'white',
     },
-    pickerStyle: {
-        paddingHorizontal: 10,
-        marginTop: 10
-    }
+    // pickerStyle: {
+    //     paddingHorizontal: 10,
+    //     marginTop: 10
+    // }
 });
