@@ -1,123 +1,247 @@
 import React, {useEffect, useState} from 'react'
-import {View, StyleSheet, Alert, FlatList, TextInput} from 'react-native';
-import { Container, InputGroup, Input, Text, Button as NBButton } from 'native-base';
-import { v4 as uuidv4 } from 'uuid';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+    View,
+    StyleSheet,
+    FlatList,
+    Dimensions,
+    TouchableOpacity,
+    Pressable,
+    Modal,
+    RefreshControl,
+} from 'react-native';
+import {Container, Text} from 'native-base';
+import {useDispatch, useSelector} from 'react-redux';
+import {Picker} from "@react-native-community/picker";
+import {useHeaderHeight} from '@react-navigation/stack';
 
 import {TodoRow} from '../components/TodoRow';
-import {addTodo, completedTodo, removeTodo} from '../store/action/todosActions';
+import {clearTodoList, completedTodo} from '../store/action/todosActions';
+import {clearAllTodos, createNewTodo, fetchTodo} from "../store/reducers/TodoState";
+import {CreateTodoListScreen} from "./CreateTodoListScreen";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import {ModalComponent} from "../components/ModalComponent";
+import {deleteTodo} from "../services/deleteTodo";
 
-export const HomeScreen = () => {
-  // const [todos, setTodos] = useState(todosItem)
-  const [value, onChangeText] = React.useState('');
-  const [text, setText] = useState('')
-  const [dropText, setDropText] = useState('')
+const {width, height} = Dimensions.get('screen');
+console.log('QQQ_height', height)
 
-  const dispatch = useDispatch()
+export const HomeScreen = ({navigation}) => {
+    const backgroundTodoColor = ['#FF8B66', '#FFD466', '#C566FF', '#669AFF', '#CEFF66'];
+    const [color, setColor] = useState(backgroundTodoColor[0])
+    const [isVisibleColorContainer, setIsVisibleColorContainer] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false)
+    const [selectedItem, setSelectedItem] = useState(null)
+    const [name, setName] = useState('pluscircle')
+    const [refreshing, setRefreshing] = useState(false)
 
-  const getTodo = useSelector(state => state.todos.allTodos)
-  console.log('QQQ_getTodo',getTodo)
 
-  const changeText = text => {
-    setText(text);
-  }
+    const headerHeight = useHeaderHeight();
 
-  const handleAddTodo = () => {
-    if(text.trim()) {
-      dispatch(addTodo(uuidv4(), text))
-      setText('')
-    } else {
-      Alert.alert('Поле не может быть пустым')
+    const Item = Picker.Item;
+
+    const dispatch = useDispatch()
+
+    const getTodo = useSelector(state => state.todos.allTodos)
+
+    const renderColor = () => {
+        return backgroundTodoColor.map(color => {
+            return <TouchableOpacity key={color} style={[styles.backgroundColorSelect, {backgroundColor: color}]}
+                    onPress={() => {
+                        handleAddTodo(color)
+                    }}
+            >
+            </TouchableOpacity>
+        })
     }
-  };
+    const handleAddTodo = (color) => {
+        setColor(color)
+        navigation.navigate('TaskDescriptionScreen', {color})
+        setIsVisibleColorContainer(false)
+    };
+    const updateColorTodoItem = () => {
 
-  const removeTodoItem = (id) => {
-    dispatch(removeTodo(id))
-  };
+    }
 
-  const completeTodoItem = (id) => {
-    dispatch(completedTodo(id))
-  }
+    const removeTodoItem = (selectedItem) => {
+        dispatch(deleteTodo(selectedItem))
+        setModalVisible(!modalVisible);
+    };
 
-  const changeDropDownText = (id, row) => {
-    setDropText({dropText})
-  };
+    const showHideModal = (selectedItem) => {
+        setSelectedItem(selectedItem)
+        setModalVisible(!modalVisible);
+    }
 
-  return (
-    <Container style={styles.container}>
-      <View style={{
-        paddingHorizontal: 10,
-        marginRight: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
+    const completeTodoItem = (id) => {
+        dispatch(completedTodo(id))
+    }
+    const clearTodos = () => {
+        dispatch(clearAllTodos())
+    }
+    const openNewScreen = (item) => {
+        const {body, color, id} = item;
+        navigation.navigate('TaskDescriptionScreen', {id, body, color})
+    }
 
-      }}>
-        <TextInput
-          style={{ height: 40, width: 300, borderColor: 'gray', borderWidth: 1 }}
-          onChangeText={text => onChangeText(text)}
-          // value={value}
-        />
-        <InputGroup style={{marginTop: 6, marginBottom: 10}} borderType='regular'>
-          <Input
-            style={styles.inputStyle}
-            borderType='regular'
-            value={text}
-            autoCapitalize="none"
-            autoCorrect={false}
-            onChangeText={changeText}
-            placeholder='Create your task'/>
-        </InputGroup>
-      </View>
+    // useEffect(() => {
+    //     dispatch(fetchTodo())
+    // }, [dispatch]);
 
-      <View style={{flex: 1}}>
-        <FlatList
-          data={getTodo}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={ ({item}) => <TodoRow
-            remove={() => removeTodoItem(item.id)}
-            complete={() => completeTodoItem(item.id)}
-            handler={() => changeDropDownText(item.id)}
-            item={item}/>}
-        />
-      </View>
+    const renderPickerOptions = () => {
+        let pickerItems = [];
+        pickerItems.push(
+            <Item key="1" label="Max" value="Max"/>,
+            <Item key="2" label="Min" value="Min"/>,
+            <Item key="3" label="Mid" value="Mid"/>
+        );
+        return pickerItems
+    }
+    return (
+        <View
+              style={[styles.container, modalVisible ? {backgroundColor: 'rgba(0,0,0,0.3)'} : 'white']}>
+            {/*<View style={styles.buttonContainer}>*/}
+            {/*    <View>*/}
+            {/*        <Button onPress={() => {*/}
+            {/*            clearTodos()*/}
+            {/*        }}*/}
+            {/*            style={{backgroundColor: '#00b7ad', borderRadius: 50}}>*/}
+            {/*            <Text>Clear</Text>*/}
+            {/*        </Button>*/}
+            {/*    </View>*/}
+            {/*</View>*/}
 
-      <View style={{paddingHorizontal: 20}}>
-        <NBButton block style={{
-          backgroundColor: '#00b7ad',
-          alignItems: 'center',
-          marginTop: 30
-        }}
-          onPress={() => handleAddTodo(text)}
-        >
-          <Text allowFontScaling={false}
-            style={{
-              lineHeight: 23,
-              fontSize: 23,
-              color: 'white'
-            }}>Add Todo
-          </Text>
-        </NBButton>
-      </View>
-    </Container>
-  )
+            <View style={[styles.flatListContainer, {marginTop: headerHeight}]}>
+                <FlatList
+                    // refreshControl={
+                    //     <RefreshControl
+                    //         refreshing={refreshing}
+                    //         onRefresh={onRefresh}
+                    //     />
+                    // }
+                    data={getTodo}
+                    keyExtractor={(item) => item.id}
+                    numColumns={2}
+                    renderItem={({item}) => <TodoRow
+                        openNewScreen={() => openNewScreen(item)}
+                        // remove={() => removeTodoItem(item.id)}
+                        complete={() => completeTodoItem(item.id)}
+                        showHideModal={() => showHideModal(item.id)}
+                        dataTodo={getTodo}
+                        renderPicker={renderPickerOptions()}
+                        item={item}/>
+                    }
+                />
+            </View>
+            {/*<Text> Создайте первую заметку </Text>*/}
+
+            {isVisibleColorContainer &&
+            <View style={styles.colorContainer}>{renderColor()}</View>
+            }
+            <TouchableOpacity
+                onPress={() => {
+                    setIsVisibleColorContainer(!isVisibleColorContainer)
+                }}
+                style={{alignItems: 'center', alignSelf: 'center', position: 'absolute', bottom: 33}}>
+                <AntDesign name={isVisibleColorContainer ? 'closecircle' : name} color='black' size={56}/>
+            </TouchableOpacity>
+
+            <View style={styles.centeredView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    selectedItem={selectedItem}
+                    onRequestClose={() => {
+                        setModalVisible(false);
+                    }}>
+
+                    <View style={styles.centeredView}>
+
+                        <View style={[styles.modalView, {width: width}]}>
+                            <TouchableOpacity
+                                onPress={() => setModalVisible(!modalVisible)}
+                                style={{position: 'absolute', top: 12, right: 12, bottom: 8}}
+                            >
+                                <AntDesign name='closecircle' color='#E4E4E5' size={20}/>
+                            </TouchableOpacity>
+
+                            <View style={styles.modalColorContainer}>{renderColor()}</View>
+
+                            <Pressable onPress={() => removeTodoItem(selectedItem)}>
+                                <Text style={styles.textStyle}>Удалить заметку</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </Modal>
+            </View>
+
+
+            {/*<ModalComponent*/}
+            {/*    visible={modalVisible}*/}
+            {/*    setModalVisible={() => setModalVisible}*/}
+            {/*    removeTask={() => removeTodoItem()}*/}
+            {/*/>*/}
+
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
-  inputStyle: {
-    borderWidth: 1,
-    paddingLeft: 10,
-    paddingBottom: 5,
-    borderRadius: 5,
-    borderColor: '#c9c9c9',
-    height: 40,
-  },
-  container: {
-    backgroundColor: 'white',
-    paddingVertical: 20,
-    flex:1,
-  }
-
+    container: {
+        flex: 1,
+    },
+    flatListContainer: {
+        width: width,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    colorContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        marginHorizontal: 56,
+        borderRadius: 14,
+        position: 'absolute',
+        bottom: 106,
+    },
+    modalColorContainer: {
+        paddingTop: 40,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginHorizontal: 56,
+        position: 'absolute',
+    },
+    textStyle: {
+        marginTop: 38,
+        paddingBottom: 60,
+        color: 'red'
+    },
+    backgroundColorSelect: {
+        width: 38,
+        height: 38,
+        borderRadius: 10,
+        marginHorizontal: 6,
+        marginVertical: 12,
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 600
+    },
+    modalView: {
+        marginLeft: 0,
+        backgroundColor: "white",
+        borderRadius: 20,
+        paddingVertical: 80,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    }
 });
-// HomeScreen.navigationOptions = {
-//   headerTitle: 'Home Screen'
-// }

@@ -1,65 +1,81 @@
-import {ADD_TODO, COMPLETED_TODO, REMOVE_TODO} from '../types';
+import {
+    SET_PRIORITY_TO_TASK,
+    ADD_TODO,
+    COMPLETED_TODO,
+    REMOVE_TODO,
+    CLEAR_TODO_LIST,
+    TODOS_FETCH_DATA_SUCCESS, UPDATE_TODO_TEXT
+} from '../types';
 
 const initialState = {
-  allTodos: [],
+    allTodos: [],
 };
 
 export const todosReducer = (state = initialState, action) => {
-  console.log('EEE_action', action);
-  switch (action.type) {
-    case ADD_TODO:
-      // Mutable way - NOT SUPPORTED BY REDUX
-      // state.allTodos.push(
-      //   {
-      //     id: action.payload.id,
-      //     text: action.payload.text,
-      //     completed: false,
-      //   });
-      // return state;
-      // Immutable way - RIGHT WAY FOR REDUX
-    return {
-      ...state,
-      allTodos: [
-        {
-          id: action.payload.id,
-          text: action.payload.text,
-          completed: false,
-        },
-        ...state.allTodos,
-      ],
-    };
-    case REMOVE_TODO:
-      return {
-        allTodos: state.allTodos.filter(todo => todo.id !== action.id),
-      };
+    console.log('SSSS_action', action)
+    switch (action.type) {
+        case TODOS_FETCH_DATA_SUCCESS: {
+            return {
+                ...state,
+                allTodos: action.payload,
+            }
+        }
+        case ADD_TODO:
+            return {
+                ...state,
+                allTodos: [{
+                    ...action.payload
+                },
+                    ...state.allTodos
+                ],
+                // allTodos: [
+                //     {
+                //         id: action.payload.id,
+                //         text: action.payload.text,
+                //         completed: false,
+                //         color: action.payload.color,
+                //         priority: action.payload.priority,
+                //     },
+                //
+                //     ...state.allTodos,
+                // ],
+            };
+        case UPDATE_TODO_TEXT:
+            const { updateTodo } = action;
+            return {
+                ...state,
+                allTodos: state.allTodos.map(todoItem => todoItem.id === updateTodo.id ?
+                    {...todoItem, body: updateTodo.body, createdAt: (+new Date())} : todoItem)
+            };
+        case REMOVE_TODO:
+            return {
+                allTodos: state.allTodos.filter(todo => todo.id !== action.payload.id),
+            };
 
-    case COMPLETED_TODO:
-      return {
-        allTodos: state.allTodos.map(todo =>
-          todo.id === action.id ? {...todo, completed: !todo.completed} : todo,
-        ),
-      };
+        case COMPLETED_TODO:
+            return {
+                allTodos: state.allTodos.map(todo =>
+                    todo.id === action.payload.id ? {...todo, completed: !todo.completed} : todo,
+                ),
+            };
+        case SET_PRIORITY_TO_TASK: {
+            return {
+                ...state,
+                allTodos: state.allTodos.map(todo => todo.id === action.payload.id ? ({
+                    ...todo,
+                    selectedValue: action.payload.selectedValue,
+                }) : todo)
+            }
+        }
+        case CLEAR_TODO_LIST: {
+            return {
+                ...state,
+                allTodos: []
+            }
+        }
 
-    default:
-      return state;
-  }
-};
-
-const redux = (action) => {
-  const rootReducers = {
-    todos: todosReducer,
-  };
-  const store = {
-    todos: {},
-  };
-  for (const [reducerName, reducer] of Object.entries(rootReducers)) {
-    const oldState = store[reducerName];
-    const returnedState = reducer(oldState, action);
-    // !!!!!!!!!!!!!!! ALWAYS RETURN NEW OBJECT FROM REDUCER WHEN DATA WAS CHANGED !!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // shallow compare
-    if (oldState !== returnedState) {
-      store[reducerName] = returnedState;
+        default:
+            return state;
     }
-  }
 };
 

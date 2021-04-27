@@ -1,43 +1,56 @@
 /* генераторы экшенов */
-import { ADD_TODO, COMPLETED_TODO, REMOVE_TODO } from '../types';
+import {ADD_TODO, CLEAR_TODO_LIST, COMPLETED_TODO, REMOVE_TODO, SET_PRIORITY_TO_TASK, UPDATE_TODO_TEXT} from '../types';
 
-export const addTodo = (id, text) => {
+export const todosFetchDataSuccess = (fetchTodos) => {
+  return {
+    type: 'TODOS_FETCH_DATA_SUCCESS',
+    payload: fetchTodos,
+  }
+}
+
+export const addTodo = (newTodo) => {
   return {
     type: ADD_TODO,
-    payload: {
-      id,
-      text
-    },
+    payload: newTodo
+  };
+};
+export const updateTodoText = (updateTodo) => {
+  console.log('TTTT_updateTodo', updateTodo)
+  return {
+    type: UPDATE_TODO_TEXT,
+    updateTodo,
   };
 };
 
-export const removeTodo = (id) => {
+export const removeTodo = (removedTodo) => {
+  console.log('WWW_removedTodo', removedTodo)
   return {
     type: REMOVE_TODO,
-    id
+    payload: removedTodo
   };
 };
 
 export const completedTodo = (id) => {
   return {
     type: COMPLETED_TODO,
-    id,
+    payload: {
+      id,
+    }
   };
 };
 
+export const setPriorityTodo = (id, selectedValue) => {
+  return {
+    type: SET_PRIORITY_TO_TASK,
+    payload: {
+      id,
+      selectedValue,
+    },
+  };
+};
+export const clearTodoList = () => {
+  return {
+    type: CLEAR_TODO_LIST,
+  };
+};
 
-// export const removeUser = id => async dispatch => {
-//   await DB.removeUser(id);
-//   dispatch({
-//     type: 'REMOVE_USER',
-//     payload: id,
-//   });
-// };
-
-// export const toggleTodo = (index) => {
-//   return { type: TOGGLE_TODO, index }
-// }
-//
-// export const setVisibilityFilter = (filter) => {
-//   return { type: SET_VISIBILITY_FILTER, filter }
-// }
