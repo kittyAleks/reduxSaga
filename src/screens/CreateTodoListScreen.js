@@ -63,13 +63,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    inputStyle: {
-        borderWidth: 1,
-        paddingLeft: 10,
-        paddingBottom: 5,
-        borderRadius: 5,
-        borderColor: '#c9c9c9',
-        height: 40,
-    },
 });
 

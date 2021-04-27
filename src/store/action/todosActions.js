@@ -1,5 +1,5 @@
 /* генераторы экшенов */
-import {ADD_TODO, CLEAR_TODO_LIST, COMPLETED_TODO, REMOVE_TODO, SET_PRIORITY_TO_TASK} from '../types';
+import {ADD_TODO, CLEAR_TODO_LIST, COMPLETED_TODO, REMOVE_TODO, SET_PRIORITY_TO_TASK, UPDATE_TODO_TEXT} from '../types';
 
 export const todosFetchDataSuccess = (fetchTodos) => {
   return {
@@ -9,14 +9,21 @@ export const todosFetchDataSuccess = (fetchTodos) => {
 }
 
 export const addTodo = (newTodo) => {
-  console.log('QQQ_newTodo', newTodo)
   return {
     type: ADD_TODO,
     payload: newTodo
   };
 };
+export const updateTodoText = (updateTodo) => {
+  console.log('TTTT_updateTodo', updateTodo)
+  return {
+    type: UPDATE_TODO_TEXT,
+    updateTodo,
+  };
+};
 
 export const removeTodo = (removedTodo) => {
+  console.log('WWW_removedTodo', removedTodo)
   return {
     type: REMOVE_TODO,
     payload: removedTodo

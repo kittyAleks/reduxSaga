@@ -4,7 +4,7 @@ import {
     COMPLETED_TODO,
     REMOVE_TODO,
     CLEAR_TODO_LIST,
-    TODOS_FETCH_DATA_SUCCESS
+    TODOS_FETCH_DATA_SUCCESS, UPDATE_TODO_TEXT
 } from '../types';
 
 const initialState = {
@@ -12,6 +12,7 @@ const initialState = {
 };
 
 export const todosReducer = (state = initialState, action) => {
+    console.log('SSSS_action', action)
     switch (action.type) {
         case TODOS_FETCH_DATA_SUCCESS: {
             return {
@@ -38,6 +39,13 @@ export const todosReducer = (state = initialState, action) => {
                 //
                 //     ...state.allTodos,
                 // ],
+            };
+        case UPDATE_TODO_TEXT:
+            const { updateTodo } = action;
+            return {
+                ...state,
+                allTodos: state.allTodos.map(todoItem => todoItem.id === updateTodo.id ?
+                    {...todoItem, body: updateTodo.body, createdAt: (+new Date())} : todoItem)
             };
         case REMOVE_TODO:
             return {

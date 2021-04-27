@@ -1,15 +1,17 @@
 import React, {useEffect, useState, useCallback} from 'react'
-import {Alert, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Alert, View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import {Container, Text, Button, InputGroup, Input} from 'native-base';
 import {useDispatch} from "react-redux";
 import {v4 as uuidv4} from "uuid";
-import { useHeaderHeight } from '@react-navigation/stack';
-import {createNewTodo} from "../store/reducers/TodoState";
+import {useHeaderHeight} from '@react-navigation/stack';
+import {createNewTodo, editTodoItem} from "../store/reducers/TodoState";
 
 export const TaskDescriptionScreen = ({navigation, route}) => {
-    const {color} = route.params;
+    const {id, body, color} = route.params;
+    console.log('AAA_route.params', route.params)
+
     const dispatch = useDispatch()
-    const [text, setText] = useState('')
+    const [text, setText] = useState(body)
     const headerHeight = useHeaderHeight();
 
     const onDone = useCallback(() => addNewTodo(text, color), [text, color]);
@@ -27,7 +29,7 @@ export const TaskDescriptionScreen = ({navigation, route}) => {
     }, [setText]);
     // TODO: обернуть с useCallback
     const addNewTodo = (text, color) => {
-        if (text.trim()) {
+        if (text.trim() && !id) {
         const newTodo = {
             id: uuidv4(),
             body: text,
@@ -39,23 +41,42 @@ export const TaskDescriptionScreen = ({navigation, route}) => {
         setText('')
         navigation.navigate('HomeScreen', {color, text})
         } else {
-            Alert.alert('Поле не может быть пустым')
+            updateTodo(text)
         }
     };
 
+    const updateTodo = (text) => {
+        const updateItem = {
+            id,
+            body: text,
+        }
+        dispatch(editTodoItem(updateItem))
+        navigation.navigate('HomeScreen')
+    }
+
     return (
         <Container style={[styles.container, {backgroundColor: color}]}>
-            <View style={[styles.inputGroupContainer, {marginTop: headerHeight}]}>
-                <InputGroup style={{marginTop: 6, marginBottom: 10}} borderType='regular'>
-                    <Input
-                        style={styles.inputStyle}
-                        borderType='regular'
-                        value={text}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        onChangeText={changeText}
-                        placeholder='Create your task'/>
-                </InputGroup>
+            <View style={{marginTop: headerHeight, paddingHorizontal: 16,}}>
+                <TextInput
+                    style={styles.inputStyle}
+                    multiline
+                    maxLength={80}
+                    numberOfLines={4}
+                    placeholder='Создайте заметку'
+                    onChangeText={changeText}
+                    value={text}
+                />
+
+                {/*<InputGroup style={{marginTop: 6, marginBottom: 10}} borderType='regular'>*/}
+                {/*    <Input*/}
+                {/*        style={styles.inputStyle}*/}
+                {/*        borderType='regular'*/}
+                {/*        value={text}*/}
+                {/*        autoCapitalize="none"*/}
+                {/*        autoCorrect={false}*/}
+                {/*        onChangeText={changeText}*/}
+                {/*        placeholder='Создайте заметку'/>*/}
+                {/*</InputGroup>*/}
             </View>
         </Container>
     )
@@ -70,5 +91,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginVertical: 10,
-    }
+    },
+    inputStyle: {
+        fontSize: 18,
+        borderBottomColor: '#acabab',
+        borderBottomWidth: 1,
+        paddingVertical: 5,
+        borderColor: '#c9c9c9',
+    },
 });

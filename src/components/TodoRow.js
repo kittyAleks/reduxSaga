@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity, Dimensions, SafeAreaView} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity, Dimensions} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch} from 'react-redux';
 import {Picker} from "@react-native-community/picker";
@@ -9,19 +9,15 @@ import {setPriorityTodo} from "../store/action/todosActions";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
 const guidelineBaseWidth = 375; // ширина экрана
-// const width = Dimensions.get('window').width
 const {width} = Dimensions.get('window')
 export const scale = size => {
     Math.round(width / guidelineBaseWidth * size);
 }
 
-export const TodoRow = ({item, rowID, remove, complete, renderPicker, openNewScreen}) => {
+export const TodoRow = ({item, rowID, showHideModal, complete, openNewScreen}) => {
     console.log('QQQ_item', item)
     const dispatch = useDispatch()
     const currentDate = moment(item.createdAt).format("D.MM.Y");
-    console.log('QQQ_currentDate', currentDate)
-
-    // const [currentDate, setCurrentDate] = useState('');
 
     const valueChange = (id, selectedValue) => {
         dispatch(setPriorityTodo(id, selectedValue))
@@ -32,20 +28,30 @@ export const TodoRow = ({item, rowID, remove, complete, renderPicker, openNewScr
             <TouchableOpacity onPress={openNewScreen} style={[styles.todoWrapper, {backgroundColor: item.color}]}
                               key={rowID}>
                 <View style={styles.todoTextWrapper}>
-                    <TouchableOpacity onPress={complete}>
+                    <View style={{
+                        height: 100, paddingHorizontal: 8, marginTop: 8,
+                    }} onPress={complete}>
                         <Text
-                            style={StyleSheet.flatten([styles.text, item.completed && styles.textCompleted])}>
+                            numberOfLines={5}
+                            ellipsizeMode="tail"
+                            style={StyleSheet.flatten([styles.text,
+                                item.completed && styles.textCompleted])}>
                             {item.body}
                         </Text>
-                    </TouchableOpacity>
+                    </View>
                     <View style={{
-                        flexDirection: 'row', alignItems: 'center', paddingTop: 100,
+                        flexDirection: 'row', alignItems: 'center', paddingBottom: 8,
                         justifyContent: 'space-around'
                     }}>
-                        <Text style={{paddingRight: 53, color: 'black', opacity: 0.6, marginLeft: 16}}>{currentDate}</Text>
+                        <Text style={{
+                            paddingRight: 53,
+                            color: 'black',
+                            opacity: 0.6,
+                            marginLeft: 16
+                        }}>{currentDate}</Text>
                         <TouchableOpacity>
                             <Ionicons
-                                onPress={remove}
+                                onPress={showHideModal}
                                 style={{color: 'black', opacity: 0.6, marginRight: 8}}
                                 name='ellipsis-horizontal-circle-sharp'
                                 size={30}/>
@@ -82,7 +88,7 @@ const styles = StyleSheet.create({
     },
     todoTextWrapper: {
         flexDirection: 'column',
-        alignItems: 'center',
+
         paddingHorizontal: 8,
         paddingVertical: 8,
 
@@ -93,7 +99,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 14,
-        color: 'white',
+        color: 'black',
     },
     // pickerStyle: {
     //     paddingHorizontal: 10,
