@@ -1,7 +1,6 @@
 import React from 'react'
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Text, View} from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -9,13 +8,10 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import {HomeScreen} from '../screens/HomeScreen';
 import {CreateTodoListScreen} from '../screens/CreateTodoListScreen';
-import {SettingsScreen} from '../screens/SettingsScreen';
 import {TaskDescriptionScreen} from "../screens/TaskDescriptionScreen";
 
 const defaultOptions = {
-    // headerStyle: {
-    //     backgroundColor: '#b3e2c5',
-    // },
+
     headerTintColor: 'red',
     headerTitleStyle: {
         fontSize: 20,
@@ -42,8 +38,6 @@ export const RootStackScreen = () => (
     <SafeAreaProvider>
         <RootStack.Navigator>
             <RootStack.Screen name='HomeScreen' options={{
-                // headerShown: true,
-                // headerTitle: 'Home Screen',
                 ...defaultOptions,
                 ...optionsMainScreenHeader,
             }} component={HomeScreen}/>

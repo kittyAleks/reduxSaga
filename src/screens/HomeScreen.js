@@ -9,21 +9,19 @@ import {
     Modal,
     RefreshControl,
 } from 'react-native';
-import {Container, Text} from 'native-base';
+import {Text} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
 import {Picker} from "@react-native-community/picker";
 import {useHeaderHeight} from '@react-navigation/stack';
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 import {TodoRow} from '../components/TodoRow';
-import {clearTodoList, completedTodo} from '../store/action/todosActions';
-import {clearAllTodos, createNewTodo, fetchTodo} from "../store/reducers/TodoState";
-import {CreateTodoListScreen} from "./CreateTodoListScreen";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import {ModalComponent} from "../components/ModalComponent";
+import {completedTodo} from '../store/action/todosActions';
+import {clearAllTodos} from "../services/clearAllTodos";
 import {deleteTodo} from "../services/deleteTodo";
+import {fetchTodo} from "../services/fetchTodo";
 
-const {width, height} = Dimensions.get('screen');
-console.log('QQQ_height', height)
+const {width} = Dimensions.get('screen');
 
 export const HomeScreen = ({navigation}) => {
     const backgroundTodoColor = ['#FF8B66', '#FFD466', '#C566FF', '#669AFF', '#CEFF66'];
@@ -32,8 +30,6 @@ export const HomeScreen = ({navigation}) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [selectedItem, setSelectedItem] = useState(null)
     const [name, setName] = useState('pluscircle')
-    const [refreshing, setRefreshing] = useState(false)
-
 
     const headerHeight = useHeaderHeight();
 
@@ -47,6 +43,7 @@ export const HomeScreen = ({navigation}) => {
         return backgroundTodoColor.map(color => {
             return <TouchableOpacity key={color} style={[styles.backgroundColorSelect, {backgroundColor: color}]}
                     onPress={() => {
+                        // onColorPress(color)
                         handleAddTodo(color)
                     }}
             >
@@ -83,9 +80,9 @@ export const HomeScreen = ({navigation}) => {
         navigation.navigate('TaskDescriptionScreen', {id, body, color})
     }
 
-    // useEffect(() => {
-    //     dispatch(fetchTodo())
-    // }, [dispatch]);
+    useEffect(() => {
+        dispatch(fetchTodo())
+    }, [dispatch]);
 
     const renderPickerOptions = () => {
         let pickerItems = [];
@@ -99,31 +96,14 @@ export const HomeScreen = ({navigation}) => {
     return (
         <View
               style={[styles.container, modalVisible ? {backgroundColor: 'rgba(0,0,0,0.3)'} : 'white']}>
-            {/*<View style={styles.buttonContainer}>*/}
-            {/*    <View>*/}
-            {/*        <Button onPress={() => {*/}
-            {/*            clearTodos()*/}
-            {/*        }}*/}
-            {/*            style={{backgroundColor: '#00b7ad', borderRadius: 50}}>*/}
-            {/*            <Text>Clear</Text>*/}
-            {/*        </Button>*/}
-            {/*    </View>*/}
-            {/*</View>*/}
 
             <View style={[styles.flatListContainer, {marginTop: headerHeight}]}>
                 <FlatList
-                    // refreshControl={
-                    //     <RefreshControl
-                    //         refreshing={refreshing}
-                    //         onRefresh={onRefresh}
-                    //     />
-                    // }
                     data={getTodo}
                     keyExtractor={(item) => item.id}
                     numColumns={2}
                     renderItem={({item}) => <TodoRow
                         openNewScreen={() => openNewScreen(item)}
-                        // remove={() => removeTodoItem(item.id)}
                         complete={() => completeTodoItem(item.id)}
                         showHideModal={() => showHideModal(item.id)}
                         dataTodo={getTodo}
@@ -132,10 +112,9 @@ export const HomeScreen = ({navigation}) => {
                     }
                 />
             </View>
-            {/*<Text> Создайте первую заметку </Text>*/}
 
             {isVisibleColorContainer &&
-            <View style={styles.colorContainer}>{renderColor()}</View>
+                <View style={styles.colorContainer}>{renderColor()}</View>
             }
             <TouchableOpacity
                 onPress={() => {
@@ -174,13 +153,6 @@ export const HomeScreen = ({navigation}) => {
                     </View>
                 </Modal>
             </View>
-
-
-            {/*<ModalComponent*/}
-            {/*    visible={modalVisible}*/}
-            {/*    setModalVisible={() => setModalVisible}*/}
-            {/*    removeTask={() => removeTodoItem()}*/}
-            {/*/>*/}
 
         </View>
     )

@@ -12,7 +12,6 @@ const initialState = {
 };
 
 export const todosReducer = (state = initialState, action) => {
-    console.log('SSSS_action', action)
     switch (action.type) {
         case TODOS_FETCH_DATA_SUCCESS: {
             return {
@@ -28,25 +27,16 @@ export const todosReducer = (state = initialState, action) => {
                 },
                     ...state.allTodos
                 ],
-                // allTodos: [
-                //     {
-                //         id: action.payload.id,
-                //         text: action.payload.text,
-                //         completed: false,
-                //         color: action.payload.color,
-                //         priority: action.payload.priority,
-                //     },
-                //
-                //     ...state.allTodos,
-                // ],
             };
+
         case UPDATE_TODO_TEXT:
-            const { updateTodo } = action;
+            const {updateTodo} = action;
             return {
                 ...state,
                 allTodos: state.allTodos.map(todoItem => todoItem.id === updateTodo.id ?
                     {...todoItem, body: updateTodo.body, createdAt: (+new Date())} : todoItem)
             };
+
         case REMOVE_TODO:
             return {
                 allTodos: state.allTodos.filter(todo => todo.id !== action.payload.id),
@@ -58,6 +48,7 @@ export const todosReducer = (state = initialState, action) => {
                     todo.id === action.payload.id ? {...todo, completed: !todo.completed} : todo,
                 ),
             };
+
         case SET_PRIORITY_TO_TASK: {
             return {
                 ...state,
@@ -67,6 +58,7 @@ export const todosReducer = (state = initialState, action) => {
                 }) : todo)
             }
         }
+
         case CLEAR_TODO_LIST: {
             return {
                 ...state,

@@ -1,12 +1,10 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity, Dimensions} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch} from 'react-redux';
-import {Picker} from "@react-native-community/picker";
 import moment from 'moment';
 
 import {setPriorityTodo} from "../store/action/todosActions";
-import AntDesign from "react-native-vector-icons/AntDesign";
 
 const guidelineBaseWidth = 375; // ширина экрана
 const {width} = Dimensions.get('window')
@@ -15,7 +13,6 @@ export const scale = size => {
 }
 
 export const TodoRow = ({item, rowID, showHideModal, complete, openNewScreen}) => {
-    console.log('QQQ_item', item)
     const dispatch = useDispatch()
     const currentDate = moment(item.createdAt).format("D.MM.Y");
 
@@ -72,10 +69,8 @@ export const TodoRow = ({item, rowID, showHideModal, complete, openNewScreen}) =
 
 const styles = StyleSheet.create({
     mainTodosWrapper: {
-        // paddingHorizontal: 8,
     },
     todoWrapper: {
-        flex: 1,
         backgroundColor: '#e0d7d7',
         paddingHorizontal: scale(8),
         marginHorizontal: 4.5,
@@ -88,10 +83,8 @@ const styles = StyleSheet.create({
     },
     todoTextWrapper: {
         flexDirection: 'column',
-
         paddingHorizontal: 8,
         paddingVertical: 8,
-
     },
     textCompleted: {
         textDecorationLine: 'line-through',

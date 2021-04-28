@@ -1,14 +1,15 @@
 import React, {useEffect, useState, useCallback} from 'react'
-import {Alert, View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
-import {Container, Text, Button, InputGroup, Input} from 'native-base';
+import {View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {Container, Text} from 'native-base';
 import {useDispatch} from "react-redux";
 import {v4 as uuidv4} from "uuid";
 import {useHeaderHeight} from '@react-navigation/stack';
-import {createNewTodo, editTodoItem} from "../store/reducers/TodoState";
+
+import {createNewTodo} from "../services/createNewTodo";
+import {editTodoItem} from "../services/editTodoItem";
 
 export const TaskDescriptionScreen = ({navigation, route}) => {
     const {id, body, color} = route.params;
-    console.log('AAA_route.params', route.params)
 
     const dispatch = useDispatch()
     const [text, setText] = useState(body)
@@ -66,17 +67,6 @@ export const TaskDescriptionScreen = ({navigation, route}) => {
                     onChangeText={changeText}
                     value={text}
                 />
-
-                {/*<InputGroup style={{marginTop: 6, marginBottom: 10}} borderType='regular'>*/}
-                {/*    <Input*/}
-                {/*        style={styles.inputStyle}*/}
-                {/*        borderType='regular'*/}
-                {/*        value={text}*/}
-                {/*        autoCapitalize="none"*/}
-                {/*        autoCorrect={false}*/}
-                {/*        onChangeText={changeText}*/}
-                {/*        placeholder='Создайте заметку'/>*/}
-                {/*</InputGroup>*/}
             </View>
         </Container>
     )

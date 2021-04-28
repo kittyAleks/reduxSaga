@@ -14,8 +14,8 @@ export const addTodo = (newTodo) => {
     payload: newTodo
   };
 };
+
 export const updateTodoText = (updateTodo) => {
-  console.log('TTTT_updateTodo', updateTodo)
   return {
     type: UPDATE_TODO_TEXT,
     updateTodo,
@@ -23,7 +23,6 @@ export const updateTodoText = (updateTodo) => {
 };
 
 export const removeTodo = (removedTodo) => {
-  console.log('WWW_removedTodo', removedTodo)
   return {
     type: REMOVE_TODO,
     payload: removedTodo
@@ -48,6 +47,7 @@ export const setPriorityTodo = (id, selectedValue) => {
     },
   };
 };
+
 export const clearTodoList = () => {
   return {
     type: CLEAR_TODO_LIST,

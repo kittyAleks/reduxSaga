@@ -1,18 +1,4 @@
-import {addTodo, removeTodo} from "../store/action/todosActions";
-
-// export const deleteTodo = async (dispatch, selectedItem) => {
-//     console.log('QQQ_selectedItem_QQQ_selectedItem', selectedItem)
-//     try {
-//         const response = await fetch(`https://6079a056460a6600174fc133.mockapi.io/api/v1/todos/${selectedItem}`, {
-//             method: 'DELETE',
-//         })
-//         const responseBody = await response.json();
-//         dispatch(removeTodo(responseBody))
-//
-//     } catch (requestError) {
-//         console.log('requestError', requestError)
-//     }
-// }
+import {removeTodo} from "../store/action/todosActions";
 
 export const deleteTodo = (selectedItem) => {
     return async dispatch => {
