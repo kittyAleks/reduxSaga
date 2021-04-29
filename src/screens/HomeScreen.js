@@ -22,7 +22,7 @@ import {deleteTodo} from "../services/deleteTodo";
 import {fetchTodo} from "../services/fetchTodo";
 import {changeTodoColor} from "../services/changeTodoColor";
 
-const {width} = Dimensions.get('screen');
+const {width, height} = Dimensions.get('window');
 
 export const HomeScreen = ({navigation}) => {
     const backgroundTodoColor = ['#FF8B66', '#FFD466', '#C566FF', '#669AFF', '#CEFF66'];
@@ -43,12 +43,12 @@ export const HomeScreen = ({navigation}) => {
     const renderColor = () => {
         return backgroundTodoColor.map(color => {
             return <TouchableOpacity key={color} style={[styles.backgroundColorSelect, {backgroundColor: color}]}
-                    onPress={() => {
-                        if(selectedItem) {
-                            changeColor(color, selectedItem)
-                        }
-                        handleAddTodo(color)
-                    }}
+                onPress={() => {
+                    if(selectedItem) {
+                        changeColor(color, selectedItem)
+                    }
+                    handleAddTodo(color)
+                }}
             >
             </TouchableOpacity>
         })
@@ -60,6 +60,7 @@ export const HomeScreen = ({navigation}) => {
     };
     const changeColor = (color, selectedItem) => {
         dispatch(changeTodoColor(color, selectedItem))
+        setModalVisible(false)
     }
 
     const removeTodoItem = (selectedItem) => {
@@ -70,6 +71,7 @@ export const HomeScreen = ({navigation}) => {
     const showHideModal = (selectedItem) => {
         setSelectedItem(selectedItem)
         setModalVisible(!modalVisible);
+        setIsVisibleColorContainer(false)
     }
 
     const completeTodoItem = (id) => {
@@ -117,7 +119,7 @@ export const HomeScreen = ({navigation}) => {
             </View>
 
             {isVisibleColorContainer &&
-                <View style={styles.colorContainer}>{renderColor()}</View>
+                <View style={[styles.colorContainer, {marginHorizontal: width/6.2}]}>{renderColor()}</View>
             }
             <TouchableOpacity
                 onPress={() => {
@@ -127,7 +129,7 @@ export const HomeScreen = ({navigation}) => {
                 <AntDesign name={isVisibleColorContainer ? 'closecircle' : name} color='black' size={56}/>
             </TouchableOpacity>
 
-            <View style={styles.centeredView}>
+            <View style={[styles.centeredView, {marginTop: height-192}]}>
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -137,7 +139,7 @@ export const HomeScreen = ({navigation}) => {
                         setModalVisible(false);
                     }}>
 
-                    <View style={styles.centeredView}>
+                    <View style={[styles.centeredView, {marginTop: height-192}]}>
 
                         <View style={[styles.modalView, {width: width}]}>
                             <TouchableOpacity
@@ -147,7 +149,7 @@ export const HomeScreen = ({navigation}) => {
                                 <AntDesign name='closecircle' color='#E4E4E5' size={20}/>
                             </TouchableOpacity>
 
-                            <View style={styles.modalColorContainer}>{renderColor()}</View>
+                            <View style={[styles.modalColorContainer, {marginHorizontal: width/7+4}]}>{renderColor()}</View>
 
                             <Pressable onPress={() => removeTodoItem(selectedItem)}>
                                 <Text style={styles.textStyle}>Удалить заметку</Text>
@@ -174,7 +176,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         backgroundColor: 'white',
-        marginHorizontal: 56,
+        paddingHorizontal: 6,
         borderRadius: 14,
         position: 'absolute',
         bottom: 106,
@@ -183,7 +185,6 @@ const styles = StyleSheet.create({
         paddingTop: 40,
         flexDirection: 'row',
         justifyContent: 'center',
-        marginHorizontal: 56,
         position: 'absolute',
     },
     textStyle: {
@@ -202,21 +203,15 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 600
     },
     modalView: {
-        marginLeft: 0,
+        height: 196,
         backgroundColor: "white",
         borderRadius: 20,
         paddingVertical: 80,
         alignItems: "center",
         shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
         shadowOpacity: 0.25,
         shadowRadius: 4,
-        elevation: 5,
     }
 });
