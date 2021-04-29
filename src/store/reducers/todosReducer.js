@@ -4,7 +4,7 @@ import {
     COMPLETED_TODO,
     REMOVE_TODO,
     CLEAR_TODO_LIST,
-    TODOS_FETCH_DATA_SUCCESS, UPDATE_TODO_TEXT
+    TODOS_FETCH_DATA_SUCCESS, UPDATE_TODO_TEXT, UPDATE_TODO_COLOR
 } from '../types';
 
 const initialState = {
@@ -27,6 +27,13 @@ export const todosReducer = (state = initialState, action) => {
                 },
                     ...state.allTodos
                 ],
+            };
+        case UPDATE_TODO_COLOR:
+            const {updatedTodo} = action;
+            return {
+                ...state,
+                allTodos: state.allTodos.map(todoItem => todoItem.id === updatedTodo.id ?
+                    {...todoItem, color: updatedTodo.color} : todoItem)
             };
 
         case UPDATE_TODO_TEXT:

@@ -20,6 +20,7 @@ import {completedTodo} from '../store/action/todosActions';
 import {clearAllTodos} from "../services/clearAllTodos";
 import {deleteTodo} from "../services/deleteTodo";
 import {fetchTodo} from "../services/fetchTodo";
+import {changeTodoColor} from "../services/changeTodoColor";
 
 const {width} = Dimensions.get('screen');
 
@@ -43,7 +44,9 @@ export const HomeScreen = ({navigation}) => {
         return backgroundTodoColor.map(color => {
             return <TouchableOpacity key={color} style={[styles.backgroundColorSelect, {backgroundColor: color}]}
                     onPress={() => {
-                        // onColorPress(color)
+                        if(selectedItem) {
+                            changeColor(color, selectedItem)
+                        }
                         handleAddTodo(color)
                     }}
             >
@@ -52,11 +55,11 @@ export const HomeScreen = ({navigation}) => {
     }
     const handleAddTodo = (color) => {
         setColor(color)
-        navigation.navigate('TaskDescriptionScreen', {color})
+        // navigation.navigate('TaskDescriptionScreen', {color})
         setIsVisibleColorContainer(false)
     };
-    const updateColorTodoItem = () => {
-
+    const changeColor = (color, selectedItem) => {
+        dispatch(changeTodoColor(color, selectedItem))
     }
 
     const removeTodoItem = (selectedItem) => {

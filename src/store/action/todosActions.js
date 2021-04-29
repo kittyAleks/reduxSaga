@@ -1,5 +1,13 @@
 /* генераторы экшенов */
-import {ADD_TODO, CLEAR_TODO_LIST, COMPLETED_TODO, REMOVE_TODO, SET_PRIORITY_TO_TASK, UPDATE_TODO_TEXT} from '../types';
+import {
+  ADD_TODO,
+  CLEAR_TODO_LIST,
+  COMPLETED_TODO,
+  REMOVE_TODO,
+  SET_PRIORITY_TO_TASK,
+  UPDATE_TODO_COLOR,
+  UPDATE_TODO_TEXT
+} from '../types';
 
 export const todosFetchDataSuccess = (fetchTodos) => {
   return {
@@ -21,6 +29,14 @@ export const updateTodoText = (updateTodo) => {
     updateTodo,
   };
 };
+
+export const updateTodoColor = (updatedTodo) => {
+  console.log('EEE_ACTION_updatedTodo', updatedTodo)
+  return {
+    type: UPDATE_TODO_COLOR,
+    updatedTodo
+  }
+}
 
 export const removeTodo = (removedTodo) => {
   return {
