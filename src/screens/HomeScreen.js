@@ -108,7 +108,7 @@ export const HomeScreen = ({navigation}) => {
         <View
             style={styles.container}>
 
-            <View style={[styles.flatListContainer, {marginTop: headerHeight, paddingTop: 54/2}]}>
+            <View style={[styles.flatListContainer, {marginTop: headerHeight, paddingTop: 54 / 2}]}>
                 <FlatList
                     data={getTodo}
                     keyExtractor={(item) => item.id}
@@ -125,18 +125,26 @@ export const HomeScreen = ({navigation}) => {
             </View>
 
             {isVisibleColorContainer &&
-            <View style={[styles.colorContainer, {marginHorizontal: width / 6.2}]}>{renderColor(CREATE)}</View>
+                <View style={[styles.colorContainer, {marginHorizontal: width / 6.2}]}>{renderColor(CREATE)}</View>
             }
-            <TouchableOpacity
+            <TouchableOpacity style={styles.closeCircleIconStyle}
                 onPress={() => {
                     setIsVisibleColorContainer(!isVisibleColorContainer)
-                }}
-                style={{alignItems: 'center', alignSelf: 'center', position: 'absolute', bottom: 33}}>
-                <AntDesign name={isVisibleColorContainer ? 'closecircle' : name} color='black' size={56}/>
+                }}>
+                <View
+                    style={{width: 56, height: 56, borderRadius: 50, backgroundColor: 'white'}}>
+                    <AntDesign name={isVisibleColorContainer ? 'closecircle' : name} color='black' size={56}/>
+                </View>
             </TouchableOpacity>
 
             {modalVisible ?
-                <View style={{position: 'absolute', width: width, height: height, backgroundColor: 'black', opacity: 0.5}}/> :
+                <View style={{
+                    position: 'absolute',
+                    width: width,
+                    height: height,
+                    backgroundColor: 'black',
+                    opacity: 0.5
+                }}/> :
                 null}
 
             <View style={[styles.centeredView, {marginTop: MODAL_MARGIN_TOP}]}>
@@ -227,5 +235,11 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOpacity: 0.25,
         shadowRadius: 4,
+    },
+    closeCircleIconStyle: {
+        alignItems: 'center',
+        alignSelf: 'center',
+        position: 'absolute',
+        bottom: 33
     }
 });
