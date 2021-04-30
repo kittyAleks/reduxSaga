@@ -36,20 +36,18 @@ export const TodoRow = ({item, rowID, showHideModal, complete, openNewScreen}) =
                             {item.body}
                         </Text>
                     </View>
+
                     <View style={{
-                        flexDirection: 'row', alignItems: 'center', paddingBottom: 8,
-                        justifyContent: 'space-around'
+                        flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-around',
                     }}>
-                        <Text style={{
-                            paddingRight: 53,
-                            color: 'black',
-                            opacity: 0.6,
-                            marginLeft: 16
-                        }}>{currentDate}</Text>
-                        <TouchableOpacity>
+                        <Text style={styles.dataStyle}>{currentDate}</Text>
+                        <View style={{width: 15, height: 3,marginBottom: 14, left: 12,
+                            backgroundColor: 'white'}}>
+                        </View>
+                        <TouchableOpacity  style={{ marginTop: 14}}>
                             <Ionicons
                                 onPress={showHideModal}
-                                style={{color: 'black', opacity: 0.6, marginRight: 8}}
+                                style={{color: 'black', opacity: 0.6}}
                                 name='ellipsis-horizontal-circle-sharp'
                                 size={30}/>
                         </TouchableOpacity>
@@ -69,14 +67,12 @@ export const TodoRow = ({item, rowID, showHideModal, complete, openNewScreen}) =
 
 const styles = StyleSheet.create({
     mainTodosWrapper: {
+        marginHorizontal: 4.5,
     },
     todoWrapper: {
         backgroundColor: '#e0d7d7',
         paddingHorizontal: scale(8),
-        marginHorizontal: 4.5,
         marginVertical: 4.5,
-        borderWidth: 1,
-        borderColor: '#447e2f',
         borderRadius: 20,
         width: 167,
         height: 167,
@@ -93,7 +89,16 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 14,
         color: 'black',
+        height: 100,
     },
+    dataStyle: {
+        fontSize: 12,
+        paddingRight: 53,
+        color: 'black',
+        opacity: 0.6,
+        marginLeft: 16,
+        marginBottom: 4
+    }
     // pickerStyle: {
     //     paddingHorizontal: 10,
     //     marginTop: 10

@@ -22,10 +22,13 @@ import {deleteTodo} from "../services/deleteTodo";
 import {fetchTodo} from "../services/fetchTodo";
 import {changeTodoColor} from "../services/changeTodoColor";
 
-const {width, height} = Dimensions.get('window');
+const {width, height} = Dimensions.get('screen');
+const EDIT = 'EDIT';
+const CREATE = 'CREATE';
+const MODAL_MARGIN_TOP = height - 192;
 
 export const HomeScreen = ({navigation}) => {
-    const backgroundTodoColor = ['#FF8B66', '#FFD466', '#C566FF', '#669AFF', '#CEFF66'];
+    const backgroundTodoColor = ['#f5a883', '#fde482', '#d69cf4', '#b3e1ee', '#96ca00'];
     const [color, setColor] = useState(backgroundTodoColor[0])
     const [isVisibleColorContainer, setIsVisibleColorContainer] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
@@ -40,22 +43,25 @@ export const HomeScreen = ({navigation}) => {
 
     const getTodo = useSelector(state => state.todos.allTodos)
 
-    const renderColor = () => {
+    const renderColor = (option) => {
         return backgroundTodoColor.map(color => {
             return <TouchableOpacity key={color} style={[styles.backgroundColorSelect, {backgroundColor: color}]}
                 onPress={() => {
-                    if(selectedItem) {
-                        changeColor(color, selectedItem)
+                    switch (option) {
+                        case EDIT: {
+                            return changeColor(color, selectedItem)
+                        }
+                        case CREATE: {
+                            return handleAddTodo(color)
+                        }
                     }
-                    handleAddTodo(color)
-                }}
-            >
+                }}>
             </TouchableOpacity>
         })
     }
     const handleAddTodo = (color) => {
         setColor(color)
-        // navigation.navigate('TaskDescriptionScreen', {color})
+        navigation.navigate('TaskDescriptionScreen', {color})
         setIsVisibleColorContainer(false)
     };
     const changeColor = (color, selectedItem) => {
@@ -100,9 +106,9 @@ export const HomeScreen = ({navigation}) => {
     }
     return (
         <View
-              style={[styles.container, modalVisible ? {backgroundColor: 'rgba(0,0,0,0.3)'} : 'white']}>
+            style={styles.container}>
 
-            <View style={[styles.flatListContainer, {marginTop: headerHeight}]}>
+            <View style={[styles.flatListContainer, {marginTop: headerHeight, paddingTop: 54/2}]}>
                 <FlatList
                     data={getTodo}
                     keyExtractor={(item) => item.id}
@@ -119,7 +125,7 @@ export const HomeScreen = ({navigation}) => {
             </View>
 
             {isVisibleColorContainer &&
-                <View style={[styles.colorContainer, {marginHorizontal: width/6.2}]}>{renderColor()}</View>
+            <View style={[styles.colorContainer, {marginHorizontal: width / 6.2}]}>{renderColor(CREATE)}</View>
             }
             <TouchableOpacity
                 onPress={() => {
@@ -129,7 +135,11 @@ export const HomeScreen = ({navigation}) => {
                 <AntDesign name={isVisibleColorContainer ? 'closecircle' : name} color='black' size={56}/>
             </TouchableOpacity>
 
-            <View style={[styles.centeredView, {marginTop: height-192}]}>
+            {modalVisible ?
+                <View style={{position: 'absolute', width: width, height: height, backgroundColor: 'black', opacity: 0.5}}/> :
+                null}
+
+            <View style={[styles.centeredView, {marginTop: MODAL_MARGIN_TOP}]}>
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -139,7 +149,7 @@ export const HomeScreen = ({navigation}) => {
                         setModalVisible(false);
                     }}>
 
-                    <View style={[styles.centeredView, {marginTop: height-192}]}>
+                    <View style={[styles.centeredView, {marginTop: MODAL_MARGIN_TOP}]}>
 
                         <View style={[styles.modalView, {width: width}]}>
                             <TouchableOpacity
@@ -149,7 +159,8 @@ export const HomeScreen = ({navigation}) => {
                                 <AntDesign name='closecircle' color='#E4E4E5' size={20}/>
                             </TouchableOpacity>
 
-                            <View style={[styles.modalColorContainer, {marginHorizontal: width/7+4}]}>{renderColor()}</View>
+                            <View
+                                style={[styles.modalColorContainer, {marginHorizontal: width / 7 + 4}]}>{renderColor(EDIT)}</View>
 
                             <Pressable onPress={() => removeTodoItem(selectedItem)}>
                                 <Text style={styles.textStyle}>Удалить заметку</Text>
@@ -166,16 +177,19 @@ export const HomeScreen = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white',
     },
     flatListContainer: {
         width: width,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     colorContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         backgroundColor: 'white',
+        borderWidth: 1,
+        borderColor: 'rgba(158, 150, 150, 0.2)',
         paddingHorizontal: 6,
         borderRadius: 14,
         position: 'absolute',

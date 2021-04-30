@@ -61,6 +61,8 @@ export const TaskDescriptionScreen = ({navigation, route}) => {
                 <TextInput
                     style={styles.inputStyle}
                     multiline
+                    selectionColor='black'
+                    autoFocus={!text}
                     maxLength={80}
                     numberOfLines={4}
                     placeholder='Создайте заметку'
@@ -84,8 +86,6 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         fontSize: 18,
-        borderBottomColor: '#acabab',
-        borderBottomWidth: 1,
         paddingVertical: 5,
         borderColor: '#c9c9c9',
     },
