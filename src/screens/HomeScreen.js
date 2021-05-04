@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
     Pressable,
     Modal,
-    RefreshControl,
+    RefreshControl, ImageBackground,
 } from 'react-native';
 import {Text} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
@@ -46,16 +46,16 @@ export const HomeScreen = ({navigation}) => {
     const renderColor = (option) => {
         return backgroundTodoColor.map(color => {
             return <TouchableOpacity key={color} style={[styles.backgroundColorSelect, {backgroundColor: color}]}
-                onPress={() => {
-                    switch (option) {
-                        case EDIT: {
-                            return changeColor(color, selectedItem)
-                        }
-                        case CREATE: {
-                            return handleAddTodo(color)
-                        }
-                    }
-                }}>
+                 onPress={() => {
+                     switch (option) {
+                         case EDIT: {
+                             return changeColor(color, selectedItem)
+                         }
+                         case CREATE: {
+                             return handleAddTodo(color)
+                         }
+                     }
+                 }}>
             </TouchableOpacity>
         })
     }
@@ -105,9 +105,9 @@ export const HomeScreen = ({navigation}) => {
         return pickerItems
     }
     return (
-        <View
-            style={styles.container}>
-
+        <ImageBackground
+            source={require('../../src/img/2222.png')}
+            style={styles.image}>
             <View style={[styles.flatListContainer, {marginTop: headerHeight, paddingTop: 54 / 2}]}>
                 <FlatList
                     data={getTodo}
@@ -125,12 +125,12 @@ export const HomeScreen = ({navigation}) => {
             </View>
 
             {isVisibleColorContainer &&
-                <View style={[styles.colorContainer, {marginHorizontal: width / 6.2}]}>{renderColor(CREATE)}</View>
+            <View style={[styles.colorContainer, {marginHorizontal: width / 6.2}]}>{renderColor(CREATE)}</View>
             }
             <TouchableOpacity style={styles.closeCircleIconStyle}
-                onPress={() => {
-                    setIsVisibleColorContainer(!isVisibleColorContainer)
-                }}>
+                              onPress={() => {
+                                  setIsVisibleColorContainer(!isVisibleColorContainer)
+                              }}>
                 <View
                     style={{width: 56, height: 56, borderRadius: 50, backgroundColor: 'white'}}>
                     <AntDesign name={isVisibleColorContainer ? 'closecircle' : name} color='black' size={56}/>
@@ -177,15 +177,14 @@ export const HomeScreen = ({navigation}) => {
                     </View>
                 </Modal>
             </View>
-
-        </View>
+        </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
+    image: {
         flex: 1,
-        backgroundColor: 'white',
+        resizeMode: "cover",
     },
     flatListContainer: {
         width: width,
