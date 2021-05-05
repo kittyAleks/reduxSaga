@@ -57,12 +57,13 @@ export const TaskDescriptionScreen = ({navigation, route}) => {
 
     return (
         <Container style={[styles.container, {backgroundColor: color}]}>
-            <View style={{marginTop: headerHeight, paddingHorizontal: 16,}}>
+            <View style={{marginTop: headerHeight, paddingHorizontal: 16}}>
                 <TextInput
                     style={styles.inputStyle}
                     multiline
                     selectionColor='black'
                     autoFocus={!text}
+                    autoCorrect={false}
                     maxLength={80}
                     numberOfLines={4}
                     placeholder='Создайте заметку'

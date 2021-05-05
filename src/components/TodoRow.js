@@ -41,7 +41,7 @@ export const TodoRow = ({item, rowID, showHideModal, complete, openNewScreen}) =
                         flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-around',
                     }}>
                         <Text style={styles.dataStyle}>{currentDate}</Text>
-                        <View style={{width: 15, height: 3,marginBottom: 14, left: 12,
+                        <View style={{width: 15, height: 3,marginBottom: 14, left: 14,
                             backgroundColor: 'white'}}>
                         </View>
                         <TouchableOpacity  style={{ marginTop: 14}}>
